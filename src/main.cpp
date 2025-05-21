@@ -6,6 +6,17 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
+void processInput(GLFWwindow *window)
+{
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
+
+void render() {
+   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+   glClear(GL_COLOR_BUFFER_BIT);
+}
+
 int main() {
    glfwInit();
    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -21,7 +32,7 @@ int main() {
    }
    
    glfwMakeContextCurrent(window);
-   
+
    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  
 
    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -31,9 +42,13 @@ int main() {
 
    glViewport(0, 0, 800, 600);
 
-   while(!glfwWindowShouldClose(window)) {
-    glfwSwapBuffers(window);
-    glfwPollEvents();    
+   while(!glfwWindowShouldClose(window)) {   
+      processInput(window);
+
+      render();
+      
+      glfwPollEvents();    
+      glfwSwapBuffers(window);
    }
 
    glfwTerminate();
