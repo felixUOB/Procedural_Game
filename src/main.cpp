@@ -17,12 +17,6 @@ const char *fragmentShaderSource = "#version 330 core\n"
     "}\0";
 
 
-float vertices[] = {
-   -0.5f, -0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f,
-    0.0f,  0.5f, 0.0f
-};  
-
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
@@ -33,12 +27,11 @@ void processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
 }
 
-void render(unsigned int shaderProgram, unsigned int VAO) {
+void render(unsigned int shaderProgram) {
    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
    glClear(GL_COLOR_BUFFER_BIT);
 
    glUseProgram(shaderProgram);
-   glBindVertexArray(VAO); // Bind the Vertex Array Object
    glDrawArrays(GL_TRIANGLES, 0, 3); // Draw the triangle
 }
 
@@ -58,7 +51,6 @@ int main() {
    }
    
    glfwMakeContextCurrent(window);
-
    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  
 
    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -70,58 +62,51 @@ int main() {
 
    // SHADERS
 
-   unsigned int vertexShader;
-   vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
+   unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
    glCompileShader(vertexShader);
-
-   unsigned int fragmentShader;
-   fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
+   // check for shader compile errors
+   int success;
+   char infoLog[512];
+   glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+   if (!success)
+   {
+      glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+      std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+   }
+   // fragment shader
+   unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
    glCompileShader(fragmentShader);
-
-   int vertSuccess;
-   int fragSuccess;
-   char infoLog[512];
-   glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &vertSuccess);
-   glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &fragSuccess);
-
-   if(!vertSuccess || !fragSuccess) {
-      glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-      if (!vertSuccess)
-         std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+   // check for shader compile errors
+   glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+   if (!success)
+   {
       glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-      if (!fragSuccess)
-         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-
-      glfwTerminate();
-      return -1;
-   } else {
-      std::cout << "Shaders compiled successfully!" << std::endl;
+      std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
    }
-
-   unsigned int shaderProgram;
-   shaderProgram = glCreateProgram();
-
+   // link shaders
+   unsigned int shaderProgram = glCreateProgram();
    glAttachShader(shaderProgram, vertexShader);
    glAttachShader(shaderProgram, fragmentShader);
    glLinkProgram(shaderProgram);
-
-   int linkSuccess;
-   glGetProgramiv(shaderProgram, GL_LINK_STATUS, &linkSuccess);
-   if(!linkSuccess) {
+   // check for linking errors
+   glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+   if (!success) {
       glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
       std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-      glfwTerminate();
-      return -1;
-   } else {
-      std::cout << "Shaders linked successfully!" << std::endl;
-
-      glDeleteShader(vertexShader);
-      glDeleteShader(fragmentShader);  
    }
+   glDeleteShader(vertexShader);
+   glDeleteShader(fragmentShader);
+
+
+   float vertices[] = {
+      -0.5f, -0.5f, 0.0f,
+       0.5f, -0.5f, 0.0f,
+       0.0f,  0.5f, 0.0f
+   };  
+
+
 
    unsigned int VAO;
    glGenVertexArrays(1, &VAO);  
@@ -129,9 +114,7 @@ int main() {
 
    unsigned int VBO;
    glGenBuffers(1, &VBO);  // Generate a buffer object
-
    glBindBuffer(GL_ARRAY_BUFFER, VBO); // Bind the buffer object to the GL_ARRAY_BUFFER target
-
    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); // Copy vertex data to the binded buffer
 
    // DEFINING HOW OPEGL SHOULD INTERPRET THE VERTEX DATA IN VERTEX BUFFER
@@ -144,11 +127,15 @@ int main() {
    while(!glfwWindowShouldClose(window)) {   
       processInput(window);
 
-      render(shaderProgram, VAO);
-      
-      glfwPollEvents();    
+      render(shaderProgram);
+   
       glfwSwapBuffers(window);
+      glfwPollEvents(); 
    }
+
+   glDeleteVertexArrays(1, &VAO);
+   glDeleteBuffers(1, &VBO);
+   glDeleteProgram(shaderProgram);
 
    glfwTerminate();
    
