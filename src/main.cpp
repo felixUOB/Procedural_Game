@@ -92,13 +92,39 @@ int main() {
 
    if(!vertSuccess || !fragSuccess) {
       glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-      std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
+      if (!vertSuccess)
+         std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+      glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+      if (!fragSuccess)
+         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
 
       glfwTerminate();
       return -1;
    } else {
       std::cout << "Shaders compiled successfully!" << std::endl;
    }
+
+   unsigned int shaderProgram;
+   shaderProgram = glCreateProgram();
+
+   glAttachShader(shaderProgram, vertexShader);
+   glAttachShader(shaderProgram, fragmentShader);
+   glLinkProgram(shaderProgram);
+
+   int linkSuccess;
+   glGetProgramiv(shaderProgram, GL_LINK_STATUS, &linkSuccess);
+   if(!linkSuccess) {
+      glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+      std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+      glfwTerminate();
+      return -1;
+   } else {
+      std::cout << "Shaders linked successfully!" << std::endl;
+      glUseProgram(shaderProgram);
+      glDeleteShader(vertexShader);
+      glDeleteShader(fragmentShader);  
+   }
+
 
    // GAME LOOP
 
