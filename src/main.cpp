@@ -9,6 +9,13 @@ const char *vertexShaderSource = "#version 330 core\n"
     "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
     "}\0";
 
+const char *fragmentShaderSource = "#version 330 core\n"
+    "out vec4 FragColor;\n"
+    "void main()\n"
+    "{\n"
+    "    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    "}\0";
+
 
 float vertices[] = {
    -0.5f, -0.5f, 0.0f,
@@ -45,7 +52,7 @@ int main() {
    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-   GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL Window", NULL, NULL);
+   GLFWwindow* window = glfwCreateWindow(800, 600, "Engine", NULL, NULL);
    if (window == NULL) {
       std::cout << "Failed to create GLFW window" << std::endl;
       glfwTerminate();
@@ -71,18 +78,26 @@ int main() {
    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
    glCompileShader(vertexShader);
 
-   int  success;
-   char infoLog[512];
-   glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+   unsigned int fragmentShader;
+   fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-   if(!success) {
+   glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+   glCompileShader(fragmentShader);
+
+   int vertSuccess;
+   int fragSuccess;
+   char infoLog[512];
+   glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &vertSuccess);
+   glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &fragSuccess);
+
+   if(!vertSuccess || !fragSuccess) {
       glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-      std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+      std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
 
       glfwTerminate();
       return -1;
    } else {
-      std::cout << "Shader compiled successfully!" << std::endl;
+      std::cout << "Shaders compiled successfully!" << std::endl;
    }
 
    // GAME LOOP
