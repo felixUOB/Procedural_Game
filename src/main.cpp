@@ -33,17 +33,15 @@ void processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
 }
 
-void render() {
+void render(unsigned int shaderProgram, unsigned int VAO) {
    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
    glClear(GL_COLOR_BUFFER_BIT);
 
-   unsigned int VBO;
-   glGenBuffers(1, &VBO);  // Generate a buffer object
-
-   glBindBuffer(GL_ARRAY_BUFFER, VBO); // Bind the buffer object to the GL_ARRAY_BUFFER target
-
-   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); // Copy vertex data to the binded buffer
+   glUseProgram(shaderProgram);
+   glBindVertexArray(VAO); // Bind the Vertex Array Object
+   glDrawArrays(GL_TRIANGLES, 0, 3); // Draw the triangle
 }
+
 
 int main() {
    glfwInit();
@@ -120,18 +118,33 @@ int main() {
       return -1;
    } else {
       std::cout << "Shaders linked successfully!" << std::endl;
-      glUseProgram(shaderProgram);
+
       glDeleteShader(vertexShader);
       glDeleteShader(fragmentShader);  
    }
 
+   unsigned int VAO;
+   glGenVertexArrays(1, &VAO);  
+   glBindVertexArray(VAO); // Bind the Vertex Array Object
+
+   unsigned int VBO;
+   glGenBuffers(1, &VBO);  // Generate a buffer object
+
+   glBindBuffer(GL_ARRAY_BUFFER, VBO); // Bind the buffer object to the GL_ARRAY_BUFFER target
+
+   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); // Copy vertex data to the binded buffer
+
+   // DEFINING HOW OPEGL SHOULD INTERPRET THE VERTEX DATA IN VERTEX BUFFER
+
+   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+   glEnableVertexAttribArray(0); 
 
    // GAME LOOP
 
    while(!glfwWindowShouldClose(window)) {   
       processInput(window);
 
-      render();
+      render(shaderProgram, VAO);
       
       glfwPollEvents();    
       glfwSwapBuffers(window);
