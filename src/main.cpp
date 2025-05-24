@@ -2,7 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-#include "shader.h"
+#include "shaders/shader.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -36,10 +36,10 @@ int main() {
       return -1;
    }  
 
-   // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
    // build and compile shader program
    // ------------------------------------
-   Shader ourShader("src/v_shader.glsl", "src/f_shader.glsl");
+   Shader ourShader("src/shaders/v_shader.glsl", "src/shaders/f_shader.glsl");
 
    // set vertex data, buffers and configure vertex attributes
    // --------------------------------------------------------
