@@ -9,7 +9,8 @@
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window, Shader ourShader);
-void render(unsigned int shaderProgram);
+
+float mixVal = 0.2f;
 
 int main() {
 
@@ -164,6 +165,7 @@ int main() {
       glActiveTexture(GL_TEXTURE1);
       glBindTexture(GL_TEXTURE_2D, texture2);
 
+      ourShader.setFloat("mixVal", mixVal);
       // render container
       ourShader.use();
       glBindVertexArray(VAO);
@@ -196,26 +198,12 @@ void processInput(GLFWwindow *window, Shader ourShader) {
    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
       glfwSetWindowShouldClose(window, true);
    } else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-   int location = glGetUniformLocation(ourShader.ID, "dist");
-
-   float currentDist;
-   glGetUniformfv(ourShader.ID, location, &currentDist);
-
-   currentDist += 0.1f;
-   glUniform1f(location, currentDist);
+   mixVal += 0.1f;
+   if (mixVal >= 1.0f)
+      mixVal = 1.0f;
    } else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-   int location = glGetUniformLocation(ourShader.ID, "dist");
-
-   float currentDist;
-   glGetUniformfv(ourShader.ID, location, &currentDist);
-
-   currentDist -= 0.1f;
-   glUniform1f(location, currentDist);
+   mixVal -= 0.1f;
+   if (mixVal <= 0.0f)
+      mixVal = 0.0f;
    }
-}
-
-// render each frame by first clearing, defining the shader program, and drawing the triangles
-// -------------------------------------------------------------------------------------------
-void render(unsigned int shaderProgram) {
-   
 }
