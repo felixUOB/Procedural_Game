@@ -21,6 +21,9 @@ glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  6.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
 
+float deltaTime = 0.0f;	// Time between current frame and last frame
+float lastFrame = 0.0f; // Time of last frame
+
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -241,6 +244,11 @@ int main() {
 
       // render container
       glBindVertexArray(VAO);
+
+      float currentFrame = glfwGetTime();
+      deltaTime = currentFrame - lastFrame;
+      lastFrame = currentFrame;  
+
       for(unsigned int i = 0; i < 10; i++)
       {
          // calculate the model matrix for each object and pass it to shader before drawing
@@ -282,7 +290,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window, Shader ourShader) {
-   const float cameraSpeed = 0.05f; // adjust accordingly
+   float cameraSpeed = 2.50f * deltaTime;
 
    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
       glfwSetWindowShouldClose(window, true);
