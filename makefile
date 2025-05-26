@@ -25,3 +25,12 @@ $(TARGET): $(OBJ_CPP) $(OBJ_C)
 
 clean:
 	rm -f $(OBJ_CPP) $(OBJ_C) $(TARGET)
+
+run:
+	make
+	./engine.exe
+
+fresh:
+	make clean
+	make
+	./engine.exe
