@@ -17,6 +17,10 @@ void processInput(GLFWwindow *window, Shader ourShader);
 
 float mixVal = 0.2f;
 
+glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  6.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
+
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -227,12 +231,8 @@ int main() {
       glm::mat4 projection    = glm::mat4(1.0f);
       // model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 
-      const float radius = 10.0f;
-      float camX = sin(glfwGetTime()) * radius;
-      float camZ = cos(glfwGetTime()) * radius;
-
       glm::mat4 view;
-      view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0)); 
+      view = glm::lookAt(cameraPos, cameraFront + cameraPos, cameraUp); 
 
       projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
       // retrieve the matrix uniform locations
@@ -282,15 +282,26 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window, Shader ourShader) {
-   if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+   const float cameraSpeed = 0.05f; // adjust accordingly
+
+   if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
       glfwSetWindowShouldClose(window, true);
-   } else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+   if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
    mixVal += 0.1f;
    if (mixVal >= 1.0f)
       mixVal = 1.0f;
-   } else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+   }
+   if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
    mixVal -= 0.1f;
    if (mixVal <= 0.0f)
       mixVal = 0.0f;
    }
+   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+      cameraPos += cameraSpeed * cameraFront;
+   if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+      cameraPos -= cameraSpeed * cameraFront;
+   if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+      cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+   if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+      cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 }
