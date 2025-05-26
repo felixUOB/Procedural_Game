@@ -1,2 +1,2 @@
 # Ignore large files or folders in language stats
-include/. linguist-vendored
+include/** linguist-vendored
