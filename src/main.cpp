@@ -6,6 +6,8 @@
 #include <glm/glm/gtc/type_ptr.hpp>
 
 #include <iostream>
+#include <stdio.h>
+#include <unistd.h>
 
 #include "services/shader.h"
 #include "services/camera.h"
@@ -20,6 +22,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+bool polyMode = false;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -60,7 +63,6 @@ int main() {
       return -1;
    }  
 
-   // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
    // build and compile shader program
    // ------------------------------------
    Shader ourShader("src/shaders/v_shader.glsl", "src/shaders/f_shader.glsl");
@@ -289,18 +291,32 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window)
 {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
+   static bool pKeyWasPressed = false;
+   static bool polyMode = false;
 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(RIGHT, deltaTime);
+   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+      glfwSetWindowShouldClose(window, true);
+
+   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+      camera.ProcessKeyboard(FORWARD, deltaTime);
+   if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+      camera.ProcessKeyboard(BACKWARD, deltaTime);
+   if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+      camera.ProcessKeyboard(LEFT, deltaTime);
+   if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+      camera.ProcessKeyboard(RIGHT, deltaTime);
+
+   bool pKeyIsPressed = glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS;
+   if (pKeyIsPressed && !pKeyWasPressed) {
+      polyMode = !polyMode;
+      if (polyMode)
+         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+      else
+         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+   }
+   pKeyWasPressed = pKeyIsPressed;
 }
+
 
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
