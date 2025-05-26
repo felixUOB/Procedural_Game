@@ -1,5 +1,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+#include <glm/glm/glm.hpp>
+#include <glm/glm/gtc/matrix_transform.hpp>
+#include <glm/glm/gtc/type_ptr.hpp>
+
 #include <iostream>
 
 #include "shaders/shader.h"
@@ -24,7 +29,7 @@ int main() {
 
    // glfw window creation
    // --------------------
-   GLFWwindow* window = glfwCreateWindow(800, 600, "Engine", NULL, NULL);
+   GLFWwindow* window = glfwCreateWindow(600, 600, "Engine", NULL, NULL);
    if (window == NULL) {
       std::cout << "Failed to create GLFW window" << std::endl;
       glfwTerminate();
@@ -49,10 +54,10 @@ int main() {
    // --------------------------------------------------------
    float vertices[] = {
     // positions          // colors           // texture coords
-     0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   2.0f, 2.0f,   // top right
-     0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   2.0f, 0.0f,   // bottom right
+     0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+     0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
     -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-    -0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   0.0f, 2.0f    // top left 
+    -0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   0.0f, 1.0f    // top left 
 };
 
    unsigned int indices[] = {
@@ -96,8 +101,8 @@ int main() {
    glGenTextures(1, &texture1);
    glBindTexture(GL_TEXTURE_2D, texture1); 
    // set the texture wrapping parameters
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);	// set texture wrapping to GL_REPEAT (default wrapping method)
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
    // set texture filtering parameters
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -148,6 +153,16 @@ int main() {
    // or set it via the texture class
    ourShader.setInt("texture2", 1);
 
+   // matrix stuff
+   // ------------
+   std::cout << "================= MATRIX STUFF =======================" << std::endl;
+   glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+   glm::mat4 trans = glm::mat4(1.0f);
+   trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+   trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+   vec = trans * vec;
+   std::cout << vec.x << " " << vec.y << " " << vec.z << std::endl;   
+   std::cout << "======================================================" << std::endl;
 
    // game loop
    // ---------
@@ -166,10 +181,27 @@ int main() {
       glBindTexture(GL_TEXTURE_2D, texture2);
 
       ourShader.setFloat("mixVal", mixVal);
+
+      glm::mat4 trans = glm::mat4(1.0);
+      trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+      trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+
+      unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
+      glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+
       // render container
       ourShader.use();
       glBindVertexArray(VAO);
       glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+      float scale = 0.5f * (sin(glfwGetTime()) + 1.5f);
+      trans = glm::mat4(1.0);
+      trans = glm::translate(trans, glm::vec3(-0.5f, 0.5f, 0.0f));
+      trans = glm::scale(trans, glm::vec3(scale, scale, 0.0f));
+      glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+      glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+
       
       glfwSwapBuffers(window);
       glfwPollEvents(); 
