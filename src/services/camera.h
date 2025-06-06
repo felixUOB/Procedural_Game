@@ -9,7 +9,6 @@
 #include <sstream>
 #include <iostream>
 
-// Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
 enum Camera_Movement {
     FORWARD,
     BACKWARD,
@@ -23,11 +22,8 @@ enum Camera_Movement {
 const float YAW         = -90.0f;
 const float PITCH       =  0.0f;
 const float SPEED       =  2.5f;
-const float SENSITIVITY =  0.1f;
-const float ZOOM        =  45.0f;
+const float SENSITIVITY =  0.05f;
 
-
-// An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
 class Camera
 {
 public:
@@ -85,7 +81,7 @@ public:
     }
 
     // processes input received from a mouse input system. Expects the offset value in both the x and y direction.
-    void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
+    void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true) 
     {
         xoffset *= MouseSensitivity;
         yoffset *= MouseSensitivity;
@@ -108,7 +104,7 @@ public:
 
 private:
     // calculates the front vector from the Camera's (updated) Euler Angles
-    void updateCameraVectors()
+    void updateCameraVectors() 
     {
         // calculate the new Front vector
         glm::vec3 front;

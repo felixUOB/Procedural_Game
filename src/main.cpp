@@ -33,6 +33,9 @@ bool firstMouse = true;
 float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 
+// lighting
+glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+
 int main() {
 
    // glfw: initialize
@@ -66,6 +69,7 @@ int main() {
    // build and compile shader program
    // ------------------------------------
    Shader ourShader("src/shaders/v_shader.glsl", "src/shaders/f_shader.glsl");
+   Shader lightCubeShader("src/shaders/v_lightSource.glsl", "src/shaders/f_lightSource.glsl");
 
    // glfw: config
    // ------------
@@ -75,6 +79,7 @@ int main() {
    // set vertex data, buffers and configure vertex attributes
    // --------------------------------------------------------
    float vertices[] = {
+         // Position    // Texture Co-ord
       -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
       0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
       0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
@@ -131,20 +136,11 @@ int main() {
       glm::vec3(-1.3f,  1.0f, -1.5f)  
    };
 
-   unsigned int indices[] = {
-      0, 1, 3,   // first triangle
-      1, 2, 3    // second triangle
-   };  
-
-   unsigned int VBO, VAO, EBO;
+   unsigned int VBO, VAO;
    glGenVertexArrays(1, &VAO);
    glGenBuffers(1, &VBO);
-   glGenBuffers(1, &EBO);
    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
    glBindVertexArray(VAO);
-   
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW); 
 
    glBindBuffer(GL_ARRAY_BUFFER, VBO);
    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -155,7 +151,18 @@ int main() {
    // texture coord attribute
    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
    glEnableVertexAttribArray(1);
-  
+
+   glBindVertexArray(0); // Unbind VAO to reduce chance of accidental changes
+   
+   unsigned int lightVAO;
+   glGenVertexArrays(1, &lightVAO);
+   glBindVertexArray(lightVAO);
+   // we only need to bind to the VBO, the container's VBO's data already contains the data.
+   glBindBuffer(GL_ARRAY_BUFFER, VBO);
+   // set the vertex attribute (only position, we dont care about texture but as we are using same VBO we need to have correct stride length)
+   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+   glEnableVertexAttribArray(0);
+
    // load and generate textures
    // --------------------------
 
@@ -214,6 +221,8 @@ int main() {
    ourShader.use();
    ourShader.setInt("texture1", 0);
    ourShader.setInt("texture2", 1);
+   ourShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+   ourShader.setVec3("lightColor",  1.0f, 1.0f, 1.0f);
 
    // render loop
    // -----------
@@ -261,7 +270,19 @@ int main() {
 
          glDrawArrays(GL_TRIANGLES, 0, 36);
       }
+      glBindVertexArray(0);
 
+      // render lightSource
+      lightCubeShader.use();
+      lightCubeShader.setMat4("projection", projection);
+      lightCubeShader.setMat4("view", view);
+      glm::mat4 model = glm::mat4(1.0f);
+      model = glm::translate(model, lightPos);
+      model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
+      lightCubeShader.setMat4("model", model);
+
+      glBindVertexArray(lightVAO);
+      glDrawArrays(GL_TRIANGLES, 0, 36);
 
       // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
       // -------------------------------------------------------------------------------
