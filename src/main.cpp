@@ -34,7 +34,7 @@ float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 
 // lighting
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+glm::vec3 lightPos(6.0f, 6.0f, 6.0f);
 
 int main() {
 
@@ -68,8 +68,8 @@ int main() {
 
    // build and compile shader program
    // ------------------------------------
-   Shader ourShader("src/shaders/v_shader.glsl", "src/shaders/f_shader.glsl");
-   Shader lightCubeShader("src/shaders/v_lightSource.glsl", "src/shaders/f_lightSource.glsl");
+   Shader ourShader("src/shaders/cubes/v_shader.glsl", "src/shaders/cubes/f_shader.glsl");
+   Shader lightCubeShader("src/shaders/lightSource/v_lightSource.glsl", "src/shaders/lightSource/f_lightSource.glsl");
 
    // glfw: config
    // ------------
@@ -290,7 +290,6 @@ int main() {
       glfwPollEvents();
    }
 
-   
    // deallocate all resources
    // ------------------------
    glDeleteVertexArrays(1, &VAO);
