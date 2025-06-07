@@ -1,10 +1,9 @@
 CXX = g++
 CC = clang
-TARGET = engine.exe 
+TARGET = engine.exe
 BUILD_DIR = build
 
-# Dont need to add extra .cpp as I have seperate rules
-SRC_CPP = src/main.cpp src/graphics/shader.cpp
+SRC_CPP = src/main.cpp src/graphics/shader.cpp src/graphics/texture.cpp 
 SRC_C = src/glad.c
 
 OBJ_CPP = $(patsubst src/%.cpp, $(BUILD_DIR)/%.o, $(SRC_CPP))
@@ -16,43 +15,24 @@ PROJECT_INCLUDES := -I./include
 
 all: $(TARGET)
 
+# Pattern rule for C++ source files
 $(BUILD_DIR)/%.o: src/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) -c $< $(PROJECT_INCLUDES) $(GLFW_CFLAGS) -o $@
 
+# Pattern rule for C source files
 $(BUILD_DIR)/%.o: src/%.c
 	@mkdir -p $(dir $@)
 	$(CC) -c $< $(PROJECT_INCLUDES) -o $@
-	
-# Compile each .cpp to .o
-%.o: src/%.cpp
-	$(CXX) -c $< $(PROJECT_INCLUDES) $(GLFW_CFLAGS) -o $@
 
-# Special rules for .cpp files in subfolders:
-shader.o: src/graphics/shader.cpp
-	$(CXX) -c $< $(PROJECT_INCLUDES) $(GLFW_CFLAGS) -o $@
-
-texture.o: src/graphics/texture.cpp
-	$(CXX) -c $< $(PROJECT_INCLUDES) $(GLFW_CFLAGS) -o $@
-
-camera.o: src/game/camera.cpp
-	$(CXX) -c $< $(PROJECT_INCLUDES) $(GLFW_CFLAGS) -o $@
-
-# Compile C source files
-%.o: src/%.c
-	$(CC) -c $< $(PROJECT_INCLUDES) -o $@
-
+# Link all object files into the final executable
 $(TARGET): $(OBJ_CPP) $(OBJ_C)
 	$(CXX) $^ $(GLFW_LIBS) -o $@
 
 clean:
-	rm -f $(OBJ_CPP) $(OBJ_C) $(TARGET)
+	rm -rf $(BUILD_DIR) $(TARGET)
 
-run:
-	make
-	./engine.exe
+run: all
+	./$(TARGET)
 
-fresh:
-	make clean
-	make
-	./engine.exe
+fresh: clean all run

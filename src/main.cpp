@@ -11,7 +11,7 @@
 
 #include "shader.h"
 #include "services/camera.h"
-#include "services/texture_loader.h"
+#include "texture.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "tools/stb_image.h"
@@ -170,8 +170,8 @@ int main() {
    // load and generate textures using custom Loader
    // ----------------------------------------------
 
-   unsigned int texture1 = TextureLoader::LoadTexture("src/elements/container.jpg");
-   unsigned int texture2 = TextureLoader::LoadTexture("src/elements/waltuh.jpg");
+   unsigned int texture1 = Texture::LoadTexture("src/elements/container.jpg");
+   unsigned int texture2 = Texture::LoadTexture("src/elements/waltuh.jpg");
 
    // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
    // -------------------------------------------------------------------------------------------
