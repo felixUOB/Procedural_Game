@@ -12,6 +12,7 @@
 #include "graphics/shader.h"
 #include "camera/camera.h"
 #include "graphics/texture.h"
+#include "lighting/light.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "tools/stb_image.h"
@@ -35,7 +36,12 @@ float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 
 // lighting
-glm::vec3 lightPos(1.2f, -2.0f, -2.0f);
+Light lightCube{
+    Light::Type::Point,
+    glm::vec3(1.2f, -2.0f, -2.0f),
+    glm::vec3(1.0f, 1.0f, 1.0f)
+};
+
 
 int main() {
 
@@ -165,8 +171,8 @@ int main() {
    cubeLightingShader.use();
    cubeLightingShader.setInt("texture1", 0);
    cubeLightingShader.setInt("texture2", 1);
-   cubeLightingShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-   cubeLightingShader.setVec3("lightColor",  1.0f, 1.0f, 1.0f);
+   cubeLightingShader.setVec3("object_color", 1.0f, 0.5f, 0.31f);
+   cubeLightingShader.setVec3("lightSource_color",  1.0f, 1.0f, 1.0f);
 
    // render loop
    // -----------
@@ -206,7 +212,7 @@ int main() {
       glm::mat4 model = glm::mat4(1.0f);
       cubeLightingShader.setMat4("model", model);
 
-      cubeLightingShader.setVec3("lightPos", lightPos);  
+      cubeLightingShader.setVec3("lightSource_position", lightCube.getPosition());  
 
 
       // render boxes
@@ -219,7 +225,7 @@ int main() {
       lightSourceShader.setMat4("projection", projection);
       lightSourceShader.setMat4("view", view);
       model = glm::mat4(1.0f);
-      model = glm::translate(model, lightPos);
+      model = glm::translate(model, lightCube.getPosition());
       model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
       lightSourceShader.setMat4("model", model);
 
@@ -272,13 +278,13 @@ void processInput(GLFWwindow *window)
    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
       camera.ProcessKeyboard(DOWN, deltaTime);
    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-      lightPos.x += 0.01;
+      lightCube.changeXPos(0.01);
    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-      lightPos.x -= 0.01;
+      lightCube.changeXPos(-0.01);
    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-      lightPos.z -= 0.01;
+      lightCube.changeZPos(-0.01);
    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-      lightPos.z += 0.01;
+      lightCube.changeZPos(0.01);
 
    bool pKeyIsPressed = glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS;
    if (pKeyIsPressed && !pKeyWasPressed) {

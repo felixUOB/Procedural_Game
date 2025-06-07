@@ -23,6 +23,9 @@ public:
     void setPosition(const glm::vec3& pos);
     void setColor(const glm::vec3& col);
 
+    void changeXPos(const float val);
+    void changeZPos(const float val);
+
 private:
     Type type;
     glm::vec3 position;

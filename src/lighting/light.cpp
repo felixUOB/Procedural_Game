@@ -11,8 +11,8 @@ Light::Light(Type type, const glm::vec3& position, const glm::vec3& color)
 
 void Light::applyToShader(Shader& shader, const std::string& uniformName) const 
 {
-    shader.setVec3(uniformName + ".position", position);
-    shader.setVec3(uniformName + ".color", color);
+    shader.setVec3(uniformName + "_position", position);
+    shader.setVec3(uniformName + "_color", color);
 }
 
 const glm::vec3& Light::getPosition() const {
@@ -29,4 +29,12 @@ void Light::setPosition(const glm::vec3& pos) {
 
 void Light::setColor(const glm::vec3& col) {
     color = col;
+}
+
+void Light::changeXPos(const float val){
+    position.x += val;
+}
+
+void Light::changeZPos(const float val){
+    position.z += val;
 }
