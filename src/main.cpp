@@ -80,49 +80,49 @@ int main() {
    // set vertex data, buffers and configure vertex attributes
    // --------------------------------------------------------
    float vertices[] = {
-         // Position    // Texture Co-ord
-      -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-      0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-      0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-      0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-      -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-      -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+    // Position            // Texture Coords       // Normals
+    -0.5f, -0.5f, -0.5f,      0.0f, 0.0f,       0.0f,  0.0f, -1.0f,
+     0.5f, -0.5f, -0.5f,      1.0f, 0.0f,       0.0f,  0.0f, -1.0f,
+     0.5f,  0.5f, -0.5f,      1.0f, 1.0f,       0.0f,  0.0f, -1.0f,
+     0.5f,  0.5f, -0.5f,      1.0f, 1.0f,       0.0f,  0.0f, -1.0f,
+    -0.5f,  0.5f, -0.5f,      0.0f, 1.0f,       0.0f,  0.0f, -1.0f,
+    -0.5f, -0.5f, -0.5f,      0.0f, 0.0f,       0.0f,  0.0f, -1.0f,
 
-      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-      0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-      0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-      0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-      -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f, -0.5f,  0.5f,      0.0f, 0.0f,       0.0f,  0.0f,  1.0f,
+     0.5f, -0.5f,  0.5f,      1.0f, 0.0f,       0.0f,  0.0f,  1.0f,
+     0.5f,  0.5f,  0.5f,      1.0f, 1.0f,       0.0f,  0.0f,  1.0f,
+     0.5f,  0.5f,  0.5f,      1.0f, 1.0f,       0.0f,  0.0f,  1.0f,
+    -0.5f,  0.5f,  0.5f,      0.0f, 1.0f,       0.0f,  0.0f,  1.0f,
+    -0.5f, -0.5f,  0.5f,      0.0f, 0.0f,       0.0f,  0.0f,  1.0f,
 
-      -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-      -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-      -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,      1.0f, 0.0f,      -1.0f,  0.0f,  0.0f,
+    -0.5f,  0.5f, -0.5f,      1.0f, 1.0f,      -1.0f,  0.0f,  0.0f,
+    -0.5f, -0.5f, -0.5f,      0.0f, 1.0f,      -1.0f,  0.0f,  0.0f,
+    -0.5f, -0.5f, -0.5f,      0.0f, 1.0f,      -1.0f,  0.0f,  0.0f,
+    -0.5f, -0.5f,  0.5f,      0.0f, 0.0f,      -1.0f,  0.0f,  0.0f,
+    -0.5f,  0.5f,  0.5f,      1.0f, 0.0f,      -1.0f,  0.0f,  0.0f,
 
-      0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-      0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-      0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-      0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-      0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-      0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,      1.0f, 0.0f,       1.0f,  0.0f,  0.0f,
+     0.5f,  0.5f, -0.5f,      1.0f, 1.0f,       1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f, -0.5f,      0.0f, 1.0f,       1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f, -0.5f,      0.0f, 1.0f,       1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f,  0.5f,      0.0f, 0.0f,       1.0f,  0.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,      1.0f, 0.0f,       1.0f,  0.0f,  0.0f,
 
-      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-      0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-      0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-      0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,      0.0f, 1.0f,       0.0f, -1.0f,  0.0f,
+     0.5f, -0.5f, -0.5f,      1.0f, 1.0f,       0.0f, -1.0f,  0.0f,
+     0.5f, -0.5f,  0.5f,      1.0f, 0.0f,       0.0f, -1.0f,  0.0f,
+     0.5f, -0.5f,  0.5f,      1.0f, 0.0f,       0.0f, -1.0f,  0.0f,
+    -0.5f, -0.5f,  0.5f,      0.0f, 0.0f,       0.0f, -1.0f,  0.0f,
+    -0.5f, -0.5f, -0.5f,      0.0f, 1.0f,       0.0f, -1.0f,  0.0f,
 
-      -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-      0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-      0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-      0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-      -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-      -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-   };
+    -0.5f,  0.5f, -0.5f,      0.0f, 1.0f,       0.0f,  1.0f,  0.0f,
+     0.5f,  0.5f, -0.5f,      1.0f, 1.0f,       0.0f,  1.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,      1.0f, 0.0f,       0.0f,  1.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,      1.0f, 0.0f,       0.0f,  1.0f,  0.0f,
+    -0.5f,  0.5f,  0.5f,      0.0f, 0.0f,       0.0f,  1.0f,  0.0f,
+    -0.5f,  0.5f, -0.5f,      0.0f, 1.0f,       0.0f,  1.0f,  0.0f
+};
 
    glm::vec3 cubePositions[] = {
       glm::vec3( 0.0f,  0.0f,  0.0f), 
@@ -147,11 +147,14 @@ int main() {
    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
    // position attribute
-   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
    glEnableVertexAttribArray(0);
    // texture coord attribute
-   glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+   glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
    glEnableVertexAttribArray(1);
+
+   glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+   glEnableVertexAttribArray(2);
 
    glBindVertexArray(0); // Unbind VAO to reduce chance of accidental changes
    
@@ -161,11 +164,11 @@ int main() {
    // we only need to bind to the VBO, the container's VBO's data already contains the data.
    glBindBuffer(GL_ARRAY_BUFFER, VBO);
    // set the vertex attribute (only position, we dont care about texture but as we are using same VBO we need to have correct stride length)
-   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
    glEnableVertexAttribArray(0);
 
-   // load and generate textures
-   // --------------------------
+   // load and generate textures using custom Loader
+   // ----------------------------------------------
 
    unsigned int texture1 = TextureLoader::LoadTexture("src/elements/container.jpg");
    unsigned int texture2 = TextureLoader::LoadTexture("src/elements/waltuh.jpg");
@@ -177,6 +180,7 @@ int main() {
    ourShader.setInt("texture2", 1);
    ourShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
    ourShader.setVec3("lightColor",  1.0f, 1.0f, 1.0f);
+   ourShader.setVec3("lightPos", lightPos);  
 
    // render loop
    // -----------
@@ -185,6 +189,7 @@ int main() {
       float currentFrame = (float)glfwGetTime();
       deltaTime = currentFrame - lastFrame;
       lastFrame = currentFrame;
+
       // input
       // -----
       processInput(window);

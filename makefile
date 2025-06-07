@@ -14,11 +14,23 @@ PROJECT_INCLUDES := -I./include
 
 all: $(TARGET)
 
-$(OBJ_CPP): $(SRC_CPP)
-	$(CXX) -c $< $(PROJECT_INCLUDES) $(GLFW_CFLAGS)
+# Compile each .cpp to .o
+%.o: src/%.cpp
+	$(CXX) -c $< $(PROJECT_INCLUDES) $(GLFW_CFLAGS) -o $@
 
-$(OBJ_C): $(SRC_C)
-	$(CC) -c $< $(PROJECT_INCLUDES)
+# Special rules for .cpp files in subfolders:
+shader.o: src/graphics/shader.cpp
+	$(CXX) -c $< $(PROJECT_INCLUDES) $(GLFW_CFLAGS) -o $@
+
+texture.o: src/graphics/texture.cpp
+	$(CXX) -c $< $(PROJECT_INCLUDES) $(GLFW_CFLAGS) -o $@
+
+camera.o: src/game/camera.cpp
+	$(CXX) -c $< $(PROJECT_INCLUDES) $(GLFW_CFLAGS) -o $@
+
+# Compile C source files
+%.o: src/%.c
+	$(CC) -c $< $(PROJECT_INCLUDES) -o $@
 
 $(TARGET): $(OBJ_CPP) $(OBJ_C)
 	$(CXX) $^ $(GLFW_LIBS) -o $@
