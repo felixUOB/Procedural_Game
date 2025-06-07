@@ -14,7 +14,7 @@ public:
 
     Light(Type type, const glm::vec3& position, const glm::vec3& color);
 
-    void applyToShader(Shader& shader, const std::string& uniformName) const;
+    void initToShader(Shader& shader, const std::string& uniformName) const;
 
     // Getters and setters
     const glm::vec3& getPosition() const;

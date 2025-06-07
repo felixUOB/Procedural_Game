@@ -9,7 +9,7 @@
 Light::Light(Type type, const glm::vec3& position, const glm::vec3& color)
     : type(type), position(position), color(color) {}
 
-void Light::applyToShader(Shader& shader, const std::string& uniformName) const 
+void Light::initToShader(Shader& shader, const std::string& uniformName) const 
 {
     shader.setVec3(uniformName + "_position", position);
     shader.setVec3(uniformName + "_color", color);

@@ -42,7 +42,6 @@ Light lightCube{
     glm::vec3(1.0f, 1.0f, 1.0f)
 };
 
-
 int main() {
 
    // glfw: initialize
@@ -172,7 +171,8 @@ int main() {
    cubeLightingShader.setInt("texture1", 0);
    cubeLightingShader.setInt("texture2", 1);
    cubeLightingShader.setVec3("object_color", 1.0f, 0.5f, 0.31f);
-   cubeLightingShader.setVec3("lightSource_color",  1.0f, 1.0f, 1.0f);
+
+   lightCube.initToShader(cubeLightingShader, "lightSource");
 
    // render loop
    // -----------
