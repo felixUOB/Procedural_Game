@@ -3,7 +3,7 @@ CC = clang
 TARGET = engine.exe
 BUILD_DIR = build
 
-SRC_CPP = src/main.cpp src/graphics/shader.cpp src/graphics/texture.cpp  src/game/camera.cpp 
+SRC_CPP = src/main.cpp src/graphics/shader.cpp src/graphics/texture.cpp  src/camera/camera.cpp 
 SRC_C = src/glad.c
 
 OBJ_CPP = $(patsubst src/%.cpp, $(BUILD_DIR)/%.o, $(SRC_CPP))

@@ -1,8 +1,8 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <glad/glad.h>
-#include <glm/glm/glm.hpp>
+#include <config/glad/glad.h>
+#include <config/glm/glm/glm.hpp>
 
 enum Camera_Movement {
     FORWARD,

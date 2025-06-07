@@ -1,10 +1,10 @@
-#include "texture.h"
+#include "graphics/texture.h"
 
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include "../tools/stb_image.h"
-#include <glad/glad.h>
+#include <config/glad/glad.h>
 #include <string>
 
 unsigned int Texture::LoadTexture(const std::string& path, bool flip, bool hasAlpha)

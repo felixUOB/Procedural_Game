@@ -1,17 +1,17 @@
-#include <glad/glad.h>
+#include <config/glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include <glm/glm/glm.hpp>
-#include <glm/glm/gtc/matrix_transform.hpp>
-#include <glm/glm/gtc/type_ptr.hpp>
+#include <config/glm/glm/glm.hpp>
+#include <config/glm/glm/gtc/matrix_transform.hpp>
+#include <config/glm/glm/gtc/type_ptr.hpp>
 
 #include <iostream>
 #include <stdio.h>
 #include <unistd.h>
 
-#include "shader.h"
-#include "camera.h"
-#include "texture.h"
+#include "graphics/shader.h"
+#include "camera/camera.h"
+#include "graphics/texture.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "tools/stb_image.h"
@@ -35,7 +35,7 @@ float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 
 // lighting
-glm::vec3 lightPos(6.0f, 6.0f, 6.0f);
+glm::vec3 lightPos(1.2f, 2.0f, -2.0f);
 
 int main() {
 
@@ -50,7 +50,7 @@ int main() {
    // glfw window creation
    // --------------------
    // GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Engine", glfwGetPrimaryMonitor(), NULL);
-   GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Engine", NULL, NULL);
+   GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Game", NULL, NULL);
    if (window == NULL) {
       std::cout << "Failed to create GLFW window" << std::endl;
       glfwTerminate();
@@ -69,8 +69,8 @@ int main() {
 
    // build and compile shader program
    // ------------------------------------
-   Shader ourShader("src/shaders/cubes/v_shader.glsl", "src/shaders/cubes/f_shader.glsl");
-   Shader lightCubeShader("src/shaders/lightSource/v_lightSource.glsl", "src/shaders/lightSource/f_lightSource.glsl");
+   Shader cubeLightingShader("shaders/cubes/v_shader.glsl", "shaders/cubes/f_shader.glsl");
+   Shader lightSourceShader("shaders/lightSource/v_lightSource.glsl", "shaders/lightSource/f_lightSource.glsl");
 
    // glfw: config
    // ------------
@@ -124,24 +124,11 @@ int main() {
     -0.5f,  0.5f, -0.5f,      0.0f, 1.0f,       0.0f,  1.0f,  0.0f
 };
 
-   glm::vec3 cubePositions[] = {
-      glm::vec3( 0.0f,  0.0f,  0.0f), 
-      glm::vec3( 2.0f,  5.0f, -15.0f), 
-      glm::vec3(-1.5f, -2.2f, -2.5f),  
-      glm::vec3(-3.8f, -2.0f, -12.3f),  
-      glm::vec3( 2.4f, -0.4f, -3.5f),  
-      glm::vec3(-1.7f,  3.0f, -7.5f),  
-      glm::vec3( 1.3f, -2.0f, -2.5f),  
-      glm::vec3( 1.5f,  2.0f, -2.5f), 
-      glm::vec3( 1.5f,  0.2f, -1.5f), 
-      glm::vec3(-1.3f,  1.0f, -1.5f)  
-   };
-
-   unsigned int VBO, VAO;
-   glGenVertexArrays(1, &VAO);
+   unsigned int VBO, cubeVAO;
+   glGenVertexArrays(1, &cubeVAO);
    glGenBuffers(1, &VBO);
    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-   glBindVertexArray(VAO);
+   glBindVertexArray(cubeVAO);
 
    glBindBuffer(GL_ARRAY_BUFFER, VBO);
    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -170,17 +157,16 @@ int main() {
    // load and generate textures using custom Loader
    // ----------------------------------------------
 
-   unsigned int texture1 = Texture::LoadTexture("src/elements/container.jpg");
-   unsigned int texture2 = Texture::LoadTexture("src/elements/waltuh.jpg");
+   unsigned int texture1 = Texture::LoadTexture("assets/textures/container.jpg");
+   unsigned int texture2 = Texture::LoadTexture("assets/textures/waltuh.jpg");
 
    // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
    // -------------------------------------------------------------------------------------------
-   ourShader.use();
-   ourShader.setInt("texture1", 0);
-   ourShader.setInt("texture2", 1);
-   ourShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-   ourShader.setVec3("lightColor",  1.0f, 1.0f, 1.0f);
-   ourShader.setVec3("lightPos", lightPos);  
+   cubeLightingShader.use();
+   cubeLightingShader.setInt("texture1", 0);
+   cubeLightingShader.setInt("texture2", 1);
+   cubeLightingShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+   cubeLightingShader.setVec3("lightColor",  1.0f, 1.0f, 1.0f);
 
    // render loop
    // -----------
@@ -206,39 +192,36 @@ int main() {
       glBindTexture(GL_TEXTURE_2D, texture2);
 
       // activate shader
-      ourShader.use();
+      cubeLightingShader.use();
 
       // pass projection matrix to shader (note that in this case it could change every frame)
       glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-      ourShader.setMat4("projection", projection);
+      cubeLightingShader.setMat4("projection", projection);
 
       // camera/view transformation
       glm::mat4 view = camera.GetViewMatrix();
-      ourShader.setMat4("view", view);
+      cubeLightingShader.setMat4("view", view);
+
+   // world transformation
+      glm::mat4 model = glm::mat4(1.0f);
+      cubeLightingShader.setMat4("model", model);
+
+      cubeLightingShader.setVec3("lightPos", lightPos);  
+
 
       // render boxes
-      glBindVertexArray(VAO);
-      for (unsigned int i = 0; i < 10; i++)
-      {
-         // calculate the model matrix for each object and pass it to shader before drawing
-         glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-         model = glm::translate(model, cubePositions[i]);
-         float angle = 20.0f * i;
-         model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-         ourShader.setMat4("model", model);
-
-         glDrawArrays(GL_TRIANGLES, 0, 36);
-      }
+      glBindVertexArray(cubeVAO);
+      glDrawArrays(GL_TRIANGLES, 0, 36);
       glBindVertexArray(0);
 
       // render lightSource
-      lightCubeShader.use();
-      lightCubeShader.setMat4("projection", projection);
-      lightCubeShader.setMat4("view", view);
-      glm::mat4 model = glm::mat4(1.0f);
+      lightSourceShader.use();
+      lightSourceShader.setMat4("projection", projection);
+      lightSourceShader.setMat4("view", view);
+      model = glm::mat4(1.0f);
       model = glm::translate(model, lightPos);
       model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
-      lightCubeShader.setMat4("model", model);
+      lightSourceShader.setMat4("model", model);
 
       glBindVertexArray(lightVAO);
       glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -251,7 +234,7 @@ int main() {
 
    // deallocate all resources
    // ------------------------
-   glDeleteVertexArrays(1, &VAO);
+   glDeleteVertexArrays(1, &cubeVAO);
    glDeleteBuffers(1, &VBO);
 
    glfwTerminate();
@@ -288,6 +271,14 @@ void processInput(GLFWwindow *window)
       camera.ProcessKeyboard(UP, deltaTime);
    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
       camera.ProcessKeyboard(DOWN, deltaTime);
+   if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+      lightPos.x += 0.01;
+   if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+      lightPos.x -= 0.01;
+   if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+      lightPos.z -= 0.01;
+   if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+      lightPos.z += 0.01;
 
    bool pKeyIsPressed = glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS;
    if (pKeyIsPressed && !pKeyWasPressed) {

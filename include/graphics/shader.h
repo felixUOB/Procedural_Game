@@ -1,9 +1,9 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <glad/glad.h>
+#include <config/glad/glad.h>
 #include <string>
-#include <glm/glm/glm.hpp>
+#include <config/glm/glm/glm.hpp>
 
 class Shader
 {
