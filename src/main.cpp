@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include "services/shader.h"
+#include "shader.h"
 #include "services/camera.h"
 #include "services/texture_loader.h"
 

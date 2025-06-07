@@ -1,12 +1,14 @@
 CXX = g++
 CC = clang
 TARGET = engine.exe 
+BUILD_DIR = build
 
-SRC_CPP = src/main.cpp
+# Dont need to add extra .cpp as I have seperate rules
+SRC_CPP = src/main.cpp src/graphics/shader.cpp
 SRC_C = src/glad.c
 
-OBJ_CPP = main.o
-OBJ_C = glad.o
+OBJ_CPP = $(patsubst src/%.cpp, $(BUILD_DIR)/%.o, $(SRC_CPP))
+OBJ_C = $(patsubst src/%.c, $(BUILD_DIR)/%.o, $(SRC_C))
 
 GLFW_CFLAGS := $(shell pkg-config --cflags glfw3)
 GLFW_LIBS := $(shell pkg-config --libs glfw3)
@@ -14,6 +16,14 @@ PROJECT_INCLUDES := -I./include
 
 all: $(TARGET)
 
+$(BUILD_DIR)/%.o: src/%.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) -c $< $(PROJECT_INCLUDES) $(GLFW_CFLAGS) -o $@
+
+$(BUILD_DIR)/%.o: src/%.c
+	@mkdir -p $(dir $@)
+	$(CC) -c $< $(PROJECT_INCLUDES) -o $@
+	
 # Compile each .cpp to .o
 %.o: src/%.cpp
 	$(CXX) -c $< $(PROJECT_INCLUDES) $(GLFW_CFLAGS) -o $@
