@@ -26,12 +26,15 @@ void main()
 	float ambientStrength = 0.1f;
 	vec3 ambient = ambientStrength * lightSource_color;
 
+	vec3 lighting = ambient + diffuse;
 
-	// result
-	vec3 result = (ambient + diffuse) * object_color;
 
-	FragColor = vec4(result, 1.0);
+	 // Sample base color from texture
+    vec3 texColor = texture(texture1, TexCoord).rgb;
 
-	// Can reintroduce textures when needed
-	// FragColor = mix(mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 1.0f), vec4(result, 1.0), 0.5);
+    // Final color is texture modulated by lighting
+    vec3 finalColor = lighting * texColor;
+
+    FragColor = vec4(finalColor, 1.0); // Use 1.0 for opaque alpha
+
 }

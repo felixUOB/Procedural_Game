@@ -39,7 +39,7 @@ float lastFrame = 0.0f; // Time of last frame
 Light lightCube{
     Light::Type::Point,
     glm::vec3(1.2f, -2.0f, -2.0f),
-    glm::vec3(1.0f, 1.0f, 1.0f)
+    glm::vec3(1.0f, 1.0f, 1.0f) // Sunset RGB
 };
 
 int main() {
@@ -170,7 +170,7 @@ int main() {
    cubeLightingShader.use();
    cubeLightingShader.setInt("texture1", 0);
    cubeLightingShader.setInt("texture2", 1);
-   cubeLightingShader.setVec3("object_color", 1.0f, 0.5f, 0.31f);
+   cubeLightingShader.setVec3("object_color", 1.0f, 1.0f, 1.0f);
 
    lightCube.initToShader(cubeLightingShader, "lightSource");
 

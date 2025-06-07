@@ -2,7 +2,7 @@ CXX = g++
 CXX_FLAGS = -std=c++11
 
 CC = clang
-TARGET = engine.exe
+TARGET = game.exe
 BUILD_DIR = build
 
 SRC_CPP = \
