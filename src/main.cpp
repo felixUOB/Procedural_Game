@@ -10,7 +10,7 @@
 #include <unistd.h>
 
 #include "shader.h"
-#include "services/camera.h"
+#include "camera.h"
 #include "texture.h"
 
 #define STB_IMAGE_IMPLEMENTATION
