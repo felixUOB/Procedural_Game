@@ -35,7 +35,7 @@ float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 
 // lighting
-glm::vec3 lightPos(1.2f, 2.0f, -2.0f);
+glm::vec3 lightPos(1.2f, -2.0f, -2.0f);
 
 int main() {
 

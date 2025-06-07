@@ -1,9 +1,11 @@
 CXX = g++
+CXX_FLAGS = -std=c++11
+
 CC = clang
 TARGET = engine.exe
 BUILD_DIR = build
 
-SRC_CPP = src/main.cpp src/graphics/shader.cpp src/graphics/texture.cpp  src/camera/camera.cpp 
+SRC_CPP = src/main.cpp src/graphics/shader.cpp src/graphics/texture.cpp  src/camera/camera.cpp src/lighting/light.cpp
 SRC_C = src/glad.c
 
 OBJ_CPP = $(patsubst src/%.cpp, $(BUILD_DIR)/%.o, $(SRC_CPP))
@@ -18,7 +20,7 @@ all: $(TARGET)
 # Pattern rule for C++ source files
 $(BUILD_DIR)/%.o: src/%.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) -c $< $(PROJECT_INCLUDES) $(GLFW_CFLAGS) -o $@
+	$(CXX) $(CXX_FLAGS) -c $< $(PROJECT_INCLUDES) $(GLFW_CFLAGS) -o $@
 
 # Pattern rule for C source files
 $(BUILD_DIR)/%.o: src/%.c
