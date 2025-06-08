@@ -6,7 +6,7 @@
 
 namespace window {
     GLFWwindow* init(int width, int height, const char* name);
-    void configure();
+    void configure(GLFWwindow* window);
     void terminate();
 }
 

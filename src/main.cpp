@@ -55,38 +55,30 @@ Light lightCube{
 int main() {
 
    GLFWwindow* window = window::init(SCR_WIDTH, SCR_HEIGHT, "Game");
-
+   window::configure(window);
    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
    glfwSetCursorPosCallback(window, mouse_callback);
 
-
-   
    // glad: load OpenGL function pointers
    // -----------------------------------
    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
       std::cout << "Failed to initialize GLAD" << std::endl;
       return -1;
    }  
+   glEnable(GL_DEPTH_TEST);
 
    // build and compile shader program
    // ------------------------------------
    Shader cubeLightingShader("shaders/cubes/v_shader.glsl", "shaders/cubes/f_shader.glsl");
    Shader lightSourceShader("shaders/lightSource/v_lightSource.glsl", "shaders/lightSource/f_lightSource.glsl");
 
-   // glfw: config
-   // ------------
-   glEnable(GL_DEPTH_TEST);
-   glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
    // creates meshes
    // --------------------------------------------------------
-
    Mesh cubeMesh(geometry::cubeVertices, true, true);
    Mesh lightSourceMesh(geometry::cubeVertices, true, true);
 
    // load and generate textures
    // --------------------------
-
    unsigned int texture1 = Texture::LoadTexture("assets/textures/container.jpg");
    unsigned int texture2 = Texture::LoadTexture("assets/textures/waltuh.jpg");
 
@@ -141,7 +133,7 @@ int main() {
    cubeMesh.Cleanup();
    lightSourceMesh.Cleanup();
 
-   glfwTerminate();
+   window::terminate();
    
    printf("Exiting...\n");
    return 0;

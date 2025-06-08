@@ -26,3 +26,13 @@ GLFWwindow* window::init(int SCR_WIDTH, int SCR_HEIGHT, const char* name)
 
     return window;
 }
+
+void window::configure(GLFWwindow* window)
+{
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+
+void window::terminate()
+{
+    glfwTerminate();
+}

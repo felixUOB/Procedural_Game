@@ -32,8 +32,8 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
         vertexCode = vShaderStream.str();
         fragmentCode = fShaderStream.str();
 
-        std::cout << "[Vertex Shader Source]\n" << vertexCode << "\n";
-        std::cout << "[Fragment Shader Source]\n" << fragmentCode << "\n";
+        // std::cout << "[Vertex Shader Source]\n" << vertexCode << "\n";
+        // std::cout << "[Fragment Shader Source]\n" << fragmentCode << "\n";
     }
     catch (std::ifstream::failure& e)
     {
