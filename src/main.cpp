@@ -28,17 +28,20 @@ bool polyMode = false;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+
+// config
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
 
+//framerate
 float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 
 // lighting
 Light lightCube{
     Light::Type::Point,
-    glm::vec3(1.2f, -2.0f, -2.0f),
+    glm::vec3(1.2f, 2.0f, 2.0f),
     glm::vec3(1.0f, 1.0f, 1.0f) // Sunset RGB
 };
 
@@ -208,9 +211,16 @@ int main() {
       glm::mat4 view = camera.GetViewMatrix();
       cubeLightingShader.setMat4("view", view);
 
-   // world transformation
+      // world transformation
       glm::mat4 model = glm::mat4(1.0f);
+      // model = glm::translate(model, glm::vec3(5.0f, 1.5f, 2.0f));
+      model = glm::scale(model, glm::vec3(1.0f, 2.0f, 1.0f));
+      model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 1.0f, 0.0f));
       cubeLightingShader.setMat4("model", model);
+
+      // Matrix that converts normalls to worldspace - ignores non uniform scaling to ensure normal vec still applies
+      cubeLightingShader.setMat3("normalMat", glm::mat3(transpose(inverse(model))));
+
 
       cubeLightingShader.setVec3("lightSource_position", lightCube.getPosition());  
 
