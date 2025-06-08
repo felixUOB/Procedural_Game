@@ -17,11 +17,11 @@
 #include "graphics/mesh.h"
 #include "core/renderer.h"
 #include "core/geometry.h"
+#include "core/timer.h"
+#include "core/window.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "tools/stb_image.h"
-
-// TODO: ADD RENDERER CLASS AND LOGIC - ABSTRACT GAME LOOP
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -44,8 +44,7 @@ float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
 
 //framerate
-float deltaTime = 0.0f;	// Time between current frame and last frame
-float lastFrame = 0.0f; // Time of last frame
+Timer timer;
 
 // lighting
 Light lightCube{
@@ -55,27 +54,13 @@ Light lightCube{
 
 int main() {
 
-   // glfw: initialize
-   // ------------------------------
-   glfwInit();
-   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+   GLFWwindow* window = window::init(SCR_WIDTH, SCR_HEIGHT, "Game");
 
-   // glfw window creation
-   // --------------------
-   // GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Engine", glfwGetPrimaryMonitor(), NULL);
-   GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Game", NULL, NULL);
-   if (window == NULL) {
-      std::cout << "Failed to create GLFW window" << std::endl;
-      glfwTerminate();
-      return -1;
-   }
-   glfwMakeContextCurrent(window);
    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
    glfwSetCursorPosCallback(window, mouse_callback);
 
+
+   
    // glad: load OpenGL function pointers
    // -----------------------------------
    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -124,9 +109,7 @@ int main() {
    // -----------
    while (!glfwWindowShouldClose(window))
    {
-      float currentFrame = (float)glfwGetTime();
-      deltaTime = currentFrame - lastFrame;
-      lastFrame = currentFrame;
+      timer.update();
 
       // input
       // -----
@@ -181,17 +164,17 @@ void processInput(GLFWwindow *window)
       glfwSetWindowShouldClose(window, true);
 
    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-      camera.ProcessKeyboard(FORWARD, deltaTime);
+      camera.ProcessKeyboard(FORWARD, timer.deltaTime);
    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-      camera.ProcessKeyboard(BACKWARD, deltaTime);
+      camera.ProcessKeyboard(BACKWARD, timer.deltaTime);
    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-      camera.ProcessKeyboard(LEFT, deltaTime);
+      camera.ProcessKeyboard(LEFT, timer.deltaTime);
    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-      camera.ProcessKeyboard(RIGHT, deltaTime);
+      camera.ProcessKeyboard(RIGHT, timer.deltaTime);
    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-      camera.ProcessKeyboard(UP, deltaTime);
+      camera.ProcessKeyboard(UP, timer.deltaTime);
    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-      camera.ProcessKeyboard(DOWN, deltaTime);
+      camera.ProcessKeyboard(DOWN, timer.deltaTime);
    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
       lightCube.changeXPos(0.01);
    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
