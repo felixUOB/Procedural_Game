@@ -120,38 +120,12 @@ int main() {
    {
       timer.update();
 
-      // input
-      // -----
       processInput(window);
 
-      // render
-      // ------
+      glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-      // ========= THIS WILL ALL GO IN MAP RENDER FUNCTION ============
-
-      map.render(renderer, shaderManager);
-
-      cubeLightingShader.use();
-
-      Transform temp;
-      float time = glfwGetTime();
-
-      temp.scale = glm::vec3(1.0f, 1.0f, 1.0f);
-      temp.rotation = glm::vec3(45.0f * time, 45.0f * time, 45.0f * time);
-
-      glm::mat4 model = temp.getModelMatrix();
-
-
-      cubeLightingShader.setMat4("model", model);
-      renderer.renderMeshWithLighting(cubeLightingShader, cubeMesh, model, lightCube);
-   
-
-      lightSourceShader.use();
-      renderer.renderLightSource(lightSourceShader, cubeMesh, lightCube);
-
-      // ===================================================================
-
-
+      map.render(renderer, shaderManager, lightCube, cubeMesh);
 
       // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
       // -------------------------------------------------------------------------------

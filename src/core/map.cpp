@@ -8,6 +8,12 @@
 #include <vendor/json.hpp>
 #include <fstream>
 
+#include <vendor/glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <vendor/glm/glm/glm.hpp>
+#include <vendor/glm/glm/gtc/matrix_transform.hpp>
+#include <vendor/glm/glm/gtc/type_ptr.hpp>
+
 void Map::load(const std::string& path)
 {
     std::cout << "Loading Map from:" <<  path << std::endl;
@@ -23,22 +29,29 @@ void Map::load(const std::string& path)
     std::cout << mapData << std::endl;
 }
 
-void Map::render(Renderer& renderer, ShaderManager& shaderManager)
+void Map::render(Renderer& renderer, ShaderManager& shaderManager, Light& lightCube, Mesh& cubeMesh)
 {
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //  // 1. Use cube shader and render all cubes
-    // cubeShader.use();
-    // for (const GameObject& obj : cubeObjects) {
-    //     obj.Render(renderer, cubeShader);
-    // }
+    // 1. Render Crates
+    Shader currentShader = shaderManager.get("cubeLightingShader");
+    currentShader.use();
 
-    // // 2. Use light source shader and render lights
-    // lightShader.use();
-    // for (const LightObject& light : lights) {
-    //     light.Render(renderer, lightShader);
-    // }
+    Transform temp;
+    float time = glfwGetTime();
 
-    // // 3. Repeat for other shaders/materials...
+    temp.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+    temp.rotation = glm::vec3(45.0f * time, 45.0f * time, 45.0f * time);
+
+    glm::mat4 model = temp.getModelMatrix();
+
+    currentShader.setMat4("model", model);
+    renderer.renderMeshWithLighting(currentShader, cubeMesh, model, lightCube);
+
+
+    // 2. Use light source shader and render lights
+
+    currentShader = shaderManager.get("lightSourceShader");
+    currentShader.use();
+
+    renderer.renderLightSource(currentShader, cubeMesh, lightCube);
 }

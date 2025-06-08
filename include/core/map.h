@@ -11,7 +11,7 @@ class Map
 {
     public:
         void load(const std::string& path);
-        void render(Renderer& renderer, ShaderManager& shaderManager);
+        void render(Renderer& renderer, ShaderManager& shaderManager, Light& lightCube, Mesh& cubeMesh);
     private:
         std::vector<GameObject> objects;
 };
