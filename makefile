@@ -15,10 +15,10 @@ SRC_CPP = \
     src/lighting/light.cpp \
 	src/graphics/mesh.cpp \
 	src/core/renderer.cpp \
-	src/core/geometry.cpp \
+	src/utils/geometry.cpp \
 	src/core/timer.cpp \
 	src/core/window.cpp \
-	src/util/transform.cpp \
+	src/utils/transform.cpp \
 	src/core/map.cpp \
 	src/tools/shader_manager.cpp \
 	src/tools/mesh_manager.cpp

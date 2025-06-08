@@ -3,7 +3,7 @@
 
 #include "core/renderer.h"
 #include "graphics/shader.h"
-#include "core/gameobj.h"
+#include "utils/gameobj.h"
 #include "tools/shader_manager.h"
 #include "tools/mesh_manager.h"
 
