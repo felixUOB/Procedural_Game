@@ -10,7 +10,8 @@ SRC_CPP = \
     src/graphics/shader.cpp \
     src/graphics/texture.cpp \
     src/camera/camera.cpp \
-    src/lighting/light.cpp
+    src/lighting/light.cpp \
+	src/graphics/mesh.cpp
 
 SRC_C = src/glad.c
 

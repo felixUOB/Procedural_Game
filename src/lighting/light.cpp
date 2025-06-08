@@ -6,8 +6,8 @@
 #include <config/glad/glad.h>
 #include <string>
    
-Light::Light(Type type, const glm::vec3& position, const glm::vec3& color)
-    : type(type), position(position), color(color) {}
+Light::Light(const glm::vec3& position, const glm::vec3& color)
+    : position(position), color(color) {}
 
 void Light::initToShader(Shader& shader, const std::string& uniformName) const 
 {

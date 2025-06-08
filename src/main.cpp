@@ -8,11 +8,13 @@
 #include <iostream>
 #include <stdio.h>
 #include <unistd.h>
+#include <vector>
 
 #include "graphics/shader.h"
 #include "camera/camera.h"
 #include "graphics/texture.h"
 #include "lighting/light.h"
+#include "graphics/mesh.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "tools/stb_image.h"
@@ -40,7 +42,6 @@ float lastFrame = 0.0f; // Time of last frame
 
 // lighting
 Light lightCube{
-    Light::Type::Point,
     glm::vec3(1.2f, 2.0f, 2.0f),
     glm::vec3(1.0f, 1.0f, 1.0f) // Sunset RGB
 };
@@ -87,7 +88,7 @@ int main() {
 
    // set vertex data, buffers and configure vertex attributes
    // --------------------------------------------------------
-   float vertices[] = {
+   std::vector<float> cubeVertices = {
     // Position            // Texture Coords       // Normals
     -0.5f, -0.5f, -0.5f,      0.0f, 0.0f,       0.0f,  0.0f, -1.0f,
      0.5f, -0.5f, -0.5f,      1.0f, 0.0f,       0.0f,  0.0f, -1.0f,
@@ -132,35 +133,8 @@ int main() {
     -0.5f,  0.5f, -0.5f,      0.0f, 1.0f,       0.0f,  1.0f,  0.0f
 };
 
-   unsigned int VBO, cubeVAO;
-   glGenVertexArrays(1, &cubeVAO);
-   glGenBuffers(1, &VBO);
-   // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-   glBindVertexArray(cubeVAO);
-
-   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-   // position attribute
-   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-   glEnableVertexAttribArray(0);
-   // texture coord attribute
-   glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-   glEnableVertexAttribArray(1);
-
-   glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
-   glEnableVertexAttribArray(2);
-
-   glBindVertexArray(0); // Unbind VAO to reduce chance of accidental changes
-   
-   unsigned int lightVAO;
-   glGenVertexArrays(1, &lightVAO);
-   glBindVertexArray(lightVAO);
-   // we only need to bind to the VBO, the container's VBO's data already contains the data.
-   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-   // set the vertex attribute (only position, we dont care about texture but as we are using same VBO we need to have correct stride length)
-   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-   glEnableVertexAttribArray(0);
+   Mesh cubeMesh(cubeVertices, true, true);
+   Mesh lightSourceMesh(cubeVertices, true, true);
 
    // load and generate textures using custom Loader
    // ----------------------------------------------
@@ -226,9 +200,7 @@ int main() {
 
 
       // render boxes
-      glBindVertexArray(cubeVAO);
-      glDrawArrays(GL_TRIANGLES, 0, 36);
-      glBindVertexArray(0);
+      cubeMesh.Draw();
 
       // render lightSource
       lightSourceShader.use();
@@ -239,8 +211,7 @@ int main() {
       model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
       lightSourceShader.setMat4("model", model);
 
-      glBindVertexArray(lightVAO);
-      glDrawArrays(GL_TRIANGLES, 0, 36);
+      lightSourceMesh.Draw();
 
       // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
       // -------------------------------------------------------------------------------
@@ -250,8 +221,8 @@ int main() {
 
    // deallocate all resources
    // ------------------------
-   glDeleteVertexArrays(1, &cubeVAO);
-   glDeleteBuffers(1, &VBO);
+   cubeMesh.Cleanup();
+   lightSourceMesh.Cleanup();
 
    glfwTerminate();
    
