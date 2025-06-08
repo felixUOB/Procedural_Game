@@ -9,14 +9,15 @@ uniform sampler2D texture1;
 uniform sampler2D texture2;
 
 uniform vec3 object_color;
-uniform vec3 lightSource_color;
 
+uniform vec3 lightSource_color;
 uniform vec3 lightSource_position;
 
 void main()
 {
 	// diffuse lighting
 	vec3 norm = normalize(Normal);
+									// WorldSpace
 	vec3 lightDir = normalize(lightSource_position - FragPos); 
 
 	float diff = max(dot(norm, lightDir), 0.0);
@@ -35,6 +36,6 @@ void main()
     // Final color is texture modulated by lighting
     vec3 finalColor = lighting * texColor;
 
-    FragColor = vec4(finalColor, 1.0); // Use 1.0 for opaque alpha
+    FragColor = vec4(finalColor, 1.0);
 
 }

@@ -15,9 +15,12 @@
 #include "graphics/texture.h"
 #include "lighting/light.h"
 #include "graphics/mesh.h"
+#include "core/renderer.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "tools/stb_image.h"
+
+// TODO: ADD RENDERER CLASS AND LOGIC - ABSTRACT GAME LOOP
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -31,6 +34,9 @@ bool polyMode = false;
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
+// renderer
+Renderer renderer(camera, SCR_WIDTH, SCR_HEIGHT);  // lowercase camera and ints, actual objects/values
+
 // config
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
@@ -43,7 +49,7 @@ float lastFrame = 0.0f; // Time of last frame
 // lighting
 Light lightCube{
     glm::vec3(1.2f, 2.0f, 2.0f),
-    glm::vec3(1.0f, 1.0f, 1.0f) // Sunset RGB
+    glm::vec3(1.0f, 1.0f, 1.0f)
 };
 
 int main() {
@@ -142,8 +148,15 @@ int main() {
    unsigned int texture1 = Texture::LoadTexture("assets/textures/container.jpg");
    unsigned int texture2 = Texture::LoadTexture("assets/textures/waltuh.jpg");
 
+   // bind textures on corresponding texture units - pre program run
+   glActiveTexture(GL_TEXTURE0);
+   glBindTexture(GL_TEXTURE_2D, texture1);
+   glActiveTexture(GL_TEXTURE1);
+   glBindTexture(GL_TEXTURE_2D, texture2);
+
    // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
    // -------------------------------------------------------------------------------------------
+
    cubeLightingShader.use();
    cubeLightingShader.setInt("texture1", 0);
    cubeLightingShader.setInt("texture2", 1);
@@ -168,22 +181,16 @@ int main() {
       glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-      // bind textures on corresponding texture units
-      glActiveTexture(GL_TEXTURE0);
-      glBindTexture(GL_TEXTURE_2D, texture1);
-      glActiveTexture(GL_TEXTURE1);
-      glBindTexture(GL_TEXTURE_2D, texture2);
-
       // activate shader
       cubeLightingShader.use();
 
       // pass projection matrix to shader (note that in this case it could change every frame)
-      glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-      cubeLightingShader.setMat4("projection", projection);
+      // glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+      // cubeLightingShader.setMat4("projection", projection);
 
-      // camera/view transformation
-      glm::mat4 view = camera.GetViewMatrix();
-      cubeLightingShader.setMat4("view", view);
+      // // camera/view transformation
+      // glm::mat4 view = camera.GetViewMatrix();
+      // cubeLightingShader.setMat4("view", view);
 
       // world transformation
       glm::mat4 model = glm::mat4(1.0f);
@@ -193,25 +200,26 @@ int main() {
       cubeLightingShader.setMat4("model", model);
 
       // Matrix that converts normalls to worldspace - ignores non uniform scaling to ensure normal vec still applies
-      cubeLightingShader.setMat3("normalMat", glm::mat3(transpose(inverse(model))));
+      // cubeLightingShader.setMat3("normalMat", glm::mat3(transpose(inverse(model))));
 
 
-      cubeLightingShader.setVec3("lightSource_position", lightCube.getPosition());  
+      // cubeLightingShader.setVec3("lightSource_position", lightCube.getPosition());  
 
+      renderer.renderMeshWithLighting(cubeLightingShader, cubeMesh, model, lightCube);
 
       // render boxes
-      cubeMesh.Draw();
+      // cubeMesh.Draw();
 
       // render lightSource
-      lightSourceShader.use();
-      lightSourceShader.setMat4("projection", projection);
-      lightSourceShader.setMat4("view", view);
-      model = glm::mat4(1.0f);
-      model = glm::translate(model, lightCube.getPosition());
-      model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
-      lightSourceShader.setMat4("model", model);
+      // lightSourceShader.use();
+      // lightSourceShader.setMat4("projection", projection);
+      // lightSourceShader.setMat4("view", view);
+      // model = glm::mat4(1.0f);
+      // model = glm::translate(model, lightCube.getPosition());
+      // model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
+      // lightSourceShader.setMat4("model", model);
 
-      lightSourceMesh.Draw();
+      // lightSourceMesh.Draw();
 
       // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
       // -------------------------------------------------------------------------------
