@@ -27,8 +27,11 @@
 #include "vendor/stb_image.h"
 #include "vendor/json.hpp"
 
+// TODO: utilizing gameobj instead of raw mesh - make jsondata create gameobj stored in map class
+// TODO: have map loop through obj stored in list and render each depending on type - minimize shader switching
+
 // TOOD: REWRITE FRAG SHADER TO ACCEPT MUTIPLE LIGHTS (ARRAY NEEDED and For loop)
-// TODO: WRITE MAP CLASS AND FUNCTIONS TO ACCEPT JSON MAP DATA AND GENERATE GAMEOBJS
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -74,8 +77,8 @@ int main() {
    }  
    glEnable(GL_DEPTH_TEST);
 
-   // build and compile shader program
-   // ------------------------------------
+   // build and compile shader programs and register to shader manager
+   // ----------------------------------------------------------------
    Shader cubeLightingShader("shaders/cubes/v_shader.glsl", "shaders/cubes/f_shader.glsl");
    Shader lightSourceShader("shaders/lightSource/v_lightSource.glsl", "shaders/lightSource/f_lightSource.glsl");
 
@@ -83,8 +86,8 @@ int main() {
    shaderManager.registerShader("cubeLightingShader", cubeLightingShader);
    shaderManager.registerShader("lightSourceShader", lightSourceShader);
 
-   // creates meshes
-   // --------------------------------------------------------
+   // creates meshes and registers to mesh manager
+   // --------------------------------------------
    Mesh cubeMesh(geometry::cubeVertices, true, true);
    Mesh lightSourceMesh(geometry::cubeVertices, true, true);
 
@@ -132,8 +135,6 @@ int main() {
 
       map.render(renderer, shaderManager, meshManager, lightCube);
 
-      // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-      // -------------------------------------------------------------------------------
       glfwSwapBuffers(window);
       glfwPollEvents();
    }

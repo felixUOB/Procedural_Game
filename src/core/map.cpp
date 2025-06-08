@@ -31,10 +31,15 @@ void Map::load(const std::string& path)
 
 void Map::render(Renderer& renderer, ShaderManager& shaderManager, MeshManager& meshManager, Light& lightCube)
 {
+    // Retreiving Meshes
+    Mesh& cubeMesh = meshManager.get("cubeMesh");
 
-    // 1. Render Crates
-    Shader currentShader = shaderManager.get("cubeLightingShader");
-    currentShader.use();
+    // Retrieving Shaders
+    Shader& cubeShader = shaderManager.get("cubeLightingShader");
+    Shader& lightSourceShader = shaderManager.get("lightSourceShader");
+
+    // 1. Render Crate(s)
+    cubeShader.use();
 
     Transform temp;
     float time = glfwGetTime();
@@ -44,14 +49,10 @@ void Map::render(Renderer& renderer, ShaderManager& shaderManager, MeshManager& 
 
     glm::mat4 model = temp.getModelMatrix();
 
-    currentShader.setMat4("model", model);
-    renderer.renderMeshWithLighting(currentShader, meshManager.get("cubeMesh"), model, lightCube);
+    cubeShader.setMat4("model", model);
+    renderer.renderMeshWithLighting(cubeShader, cubeMesh, model, lightCube);
 
-
-    // 2. Use light source shader and render lights
-
-    currentShader = shaderManager.get("lightSourceShader");
-    currentShader.use();
-
-    renderer.renderLightSource(currentShader, meshManager.get("cubeMesh"), lightCube);
+    // 2. Render light source
+    lightSourceShader.use();
+    renderer.renderLightSource(lightSourceShader, cubeMesh, lightCube);
 }
