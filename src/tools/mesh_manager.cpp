@@ -14,3 +14,11 @@ Mesh& MeshManager::get(const char* name)
 {
     return meshes.at(name);
 }
+
+void MeshManager::cleanup()
+{
+    for (auto& pair : meshes) {
+        std::cout << "Cleaning: " << pair.first << std::endl;
+        pair.second.cleanup();
+    }
+}

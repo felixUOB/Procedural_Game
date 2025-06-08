@@ -29,7 +29,7 @@ void Renderer::renderMeshWithLighting(Shader& shader, Mesh& mesh, const glm::mat
 
     shader.setVec3("lightSource_position", light.getPosition());
 
-    mesh.Draw();
+    mesh.draw();
 }
 
 void Renderer::renderLightSource(Shader& shader, Mesh& mesh, const Light& light)
@@ -45,5 +45,5 @@ void Renderer::renderLightSource(Shader& shader, Mesh& mesh, const Light& light)
     shader.setMat4("view", view);
     shader.setMat4("model", model);
 
-    mesh.Draw();
+    mesh.draw();
 }

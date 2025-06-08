@@ -27,7 +27,7 @@
 #include "vendor/stb_image.h"
 #include "vendor/json.hpp"
 
-// TODO: utilizing gameobj instead of raw mesh - make jsondata create gameobj stored in map class
+// TODO: utilizing gameobj instead of raw mesh in map render function - make jsondata create gameobj stored in map class
 // TODO: have map loop through obj stored in list and render each depending on type - minimize shader switching
 
 // TOOD: REWRITE FRAG SHADER TO ACCEPT MUTIPLE LIGHTS (ARRAY NEEDED and For loop)
@@ -141,8 +141,7 @@ int main() {
 
    // deallocate all resources
    // ------------------------
-   cubeMesh.Cleanup();
-   lightSourceMesh.Cleanup();
+   meshManager.cleanup();
 
    window::terminate();
    

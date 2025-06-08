@@ -9,8 +9,8 @@ class Mesh {
     public: 
         Mesh(const std::vector<float>& vertices, bool hasTexture, bool hasNormal);
 
-        void Draw() const;
-        void Cleanup();
+        void draw() const;
+        void cleanup();
 
     private:
         unsigned int VAO, VBO;

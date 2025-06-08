@@ -16,7 +16,7 @@
 
 void Map::load(const std::string& path)
 {
-    std::cout << "Loading Map from:" <<  path << std::endl;
+    std::cout << "Loading Map from: " <<  path << std::endl;
     nlohmann::json mapData;
 
     std::ifstream file(path);
@@ -26,7 +26,7 @@ void Map::load(const std::string& path)
     }
 
     file >> mapData;
-    std::cout << mapData << std::endl;
+    // std::cout << mapData << std::endl;
 }
 
 void Map::render(Renderer& renderer, ShaderManager& shaderManager, MeshManager& meshManager, Light& lightCube)

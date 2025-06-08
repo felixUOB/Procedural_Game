@@ -15,14 +15,14 @@ Mesh::Mesh(const std::vector<float>& vertices, bool hasTexture, bool hasNormal)
     setupMesh();
 }
 
-void Mesh::Draw() const
+void Mesh::draw() const
 {
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, m_vertices.size() / (3 + (hasTexture ? 2 : 0) + (hasNormal ? 3 : 0)));
     glBindVertexArray(0);
 }
 
-void Mesh::Cleanup()
+void Mesh::cleanup()
 {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
