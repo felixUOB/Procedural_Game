@@ -182,7 +182,7 @@ int main() {
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       // activate shader
-      cubeLightingShader.use();
+      // cubeLightingShader.use();
 
       // pass projection matrix to shader (note that in this case it could change every frame)
       // glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -206,6 +206,8 @@ int main() {
       // cubeLightingShader.setVec3("lightSource_position", lightCube.getPosition());  
 
       renderer.renderMeshWithLighting(cubeLightingShader, cubeMesh, model, lightCube);
+
+      renderer.renderLightSource(lightSourceShader, cubeMesh, lightCube);
 
       // render boxes
       // cubeMesh.Draw();

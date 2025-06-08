@@ -15,6 +15,8 @@ Renderer::Renderer(Camera& camera, int screenWidth, int screenHeight)
 
 void Renderer::renderMeshWithLighting(Shader& shader, Mesh& mesh, const glm::mat4& model, const Light& light)
 {
+    shader.use();
+
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
     glm::mat4 view = camera.GetViewMatrix();
 
@@ -26,6 +28,24 @@ void Renderer::renderMeshWithLighting(Shader& shader, Mesh& mesh, const glm::mat
     shader.setMat3("normalMat", normalMat);
 
     shader.setVec3("lightSource_position", light.getPosition());
+
+    mesh.Draw();
+}
+
+void Renderer::renderLightSource(Shader& shader, Mesh& mesh, const Light& light)
+{
+    shader.use();
+
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
+    glm::mat4 view = camera.GetViewMatrix();
+
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, light.getPosition());
+    model = glm::scale(model, glm::vec3(0.2f));
+
+    shader.setMat4("projection", projection);
+    shader.setMat4("view", view);
+    shader.setMat4("model", model);
 
     mesh.Draw();
 }
