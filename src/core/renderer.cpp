@@ -34,8 +34,6 @@ void Renderer::renderMeshWithLighting(Shader& shader, Mesh& mesh, const glm::mat
 
 void Renderer::renderLightSource(Shader& shader, Mesh& mesh, const Light& light)
 {
-    shader.use();
-
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
     glm::mat4 view = camera.GetViewMatrix();
 
