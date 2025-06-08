@@ -1,6 +1,5 @@
 #include <config/glad/glad.h>
 #include <GLFW/glfw3.h>
-
 #include <config/glm/glm/glm.hpp>
 #include <config/glm/glm/gtc/matrix_transform.hpp>
 #include <config/glm/glm/gtc/type_ptr.hpp>
@@ -19,6 +18,7 @@
 #include "core/geometry.h"
 #include "core/timer.h"
 #include "core/window.h"
+#include "util/transform.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "tools/stb_image.h"
@@ -120,13 +120,19 @@ int main() {
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       cubeLightingShader.use();
-      
-      for (const glm::vec3& pos : cubePositions) {
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, pos);
-        cubeLightingShader.setMat4("model", model);
-        renderer.renderMeshWithLighting(cubeLightingShader, cubeMesh, model, lightCube);
-      }
+
+      Transform temp;
+      float time = glfwGetTime();
+
+      temp.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+      temp.rotation = glm::vec3(45.0f * time, 45.0f * time, 45.0f * time);
+
+      glm::mat4 model = temp.getModelMatrix();
+
+
+      cubeLightingShader.setMat4("model", model);
+      renderer.renderMeshWithLighting(cubeLightingShader, cubeMesh, model, lightCube);
+   
 
       lightSourceShader.use();
       renderer.renderLightSource(lightSourceShader, cubeMesh, lightCube);

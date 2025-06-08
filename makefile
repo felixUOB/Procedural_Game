@@ -15,7 +15,9 @@ SRC_CPP = \
 	src/core/renderer.cpp \
 	src/core/geometry.cpp \
 	src/core/timer.cpp \
-	src/core/window.cpp
+	src/core/window.cpp \
+	src/util/transform.cpp \
+	src/core/map.cpp
 
 SRC_C = src/glad.c
 
