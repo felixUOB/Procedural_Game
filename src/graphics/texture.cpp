@@ -3,8 +3,8 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <tools/stb_image.h>
-#include <config/glad/glad.h>
+#include <vendor/stb_image.h>
+#include <vendor/glad/glad.h>
 #include <string>
 
 unsigned int Texture::LoadTexture(const std::string& path, bool flip, bool hasAlpha)

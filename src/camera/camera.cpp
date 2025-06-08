@@ -1,13 +1,13 @@
 #include "camera/camera.h"
 
 #include <cmath>
-#include <config/glad/glad.h>
+#include <vendor/glad/glad.h>
 
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <config/glm/glm/gtc/matrix_transform.hpp> 
+#include <vendor/glm/glm/gtc/matrix_transform.hpp> 
 
 
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) 

@@ -1,9 +1,9 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <config/glad/glad.h>
+#include <vendor/glad/glad.h>
 #include <string>
-#include <config/glm/glm/glm.hpp>
+#include <vendor/glm/glm/glm.hpp>
 
 class Texture 
 {

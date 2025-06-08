@@ -1,8 +1,8 @@
-#include <config/glad/glad.h>
+#include <vendor/glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <config/glm/glm/glm.hpp>
-#include <config/glm/glm/gtc/matrix_transform.hpp>
-#include <config/glm/glm/gtc/type_ptr.hpp>
+#include <vendor/glm/glm/glm.hpp>
+#include <vendor/glm/glm/gtc/matrix_transform.hpp>
+#include <vendor/glm/glm/gtc/type_ptr.hpp>
 
 #include <iostream>
 #include <stdio.h>
@@ -23,8 +23,8 @@
 #include "tools/shader_manager.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "tools/stb_image.h"
-#include "tools/json.hpp"
+#include "vendor/stb_image.h"
+#include "vendor/json.hpp"
 
 // TOOD: REWRITE FRAG SHADER TO ACCEPT MUTIPLE LIGHTS (ARRAY NEEDED and For loop)
 // TODO: WRITE MAP CLASS AND FUNCTIONS TO ACCEPT JSON MAP DATA AND GENERATE GAMEOBJS

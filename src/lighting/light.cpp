@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <config/glad/glad.h>
+#include <vendor/glad/glad.h>
 #include <string>
    
 Light::Light(const glm::vec3& position, const glm::vec3& color)

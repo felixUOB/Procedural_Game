@@ -5,9 +5,9 @@
 #include "graphics/mesh.h"
 #include "graphics/shader.h"
 #include "lighting/light.h"
-#include <config/glad/glad.h>
+#include <vendor/glad/glad.h>
 #include <string>
-#include <config/glm/glm/glm.hpp>
+#include <vendor/glm/glm/glm.hpp>
 
 
 class Renderer

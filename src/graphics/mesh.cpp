@@ -1,9 +1,9 @@
 #include "graphics/mesh.h"
 
-#include <config/glad/glad.h>
-#include <config/glm/glm/glm.hpp>
-#include <config/glm/glm/gtc/matrix_transform.hpp>
-#include <config/glm/glm/gtc/type_ptr.hpp>
+#include <vendor/glad/glad.h>
+#include <vendor/glm/glm/glm.hpp>
+#include <vendor/glm/glm/gtc/matrix_transform.hpp>
+#include <vendor/glm/glm/gtc/type_ptr.hpp>
 
 #include <iostream>
 #include <stdio.h>

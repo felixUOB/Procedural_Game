@@ -1,7 +1,7 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
-#include <config/glm/glm/glm.hpp>
+#include <vendor/glm/glm/glm.hpp>
 #include "graphics/shader.h"
 
 class Light 

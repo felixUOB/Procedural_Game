@@ -1,7 +1,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include <config/glm/glm/glm.hpp>
+#include <vendor/glm/glm/glm.hpp>
 #include <GLFW/glfw3.h>
 
 namespace window {

@@ -1,7 +1,7 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
-#include <config/glm/glm/glm.hpp>
+#include <vendor/glm/glm/glm.hpp>
 
 struct Transform {
     glm::vec3 position;

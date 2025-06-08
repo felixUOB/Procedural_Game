@@ -1,9 +1,9 @@
 #include "util/transform.h"
-#include <config/glad/glad.h>
+#include <vendor/glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <config/glm/glm/glm.hpp>
-#include <config/glm/glm/gtc/matrix_transform.hpp>
-#include <config/glm/glm/gtc/type_ptr.hpp>
+#include <vendor/glm/glm/glm.hpp>
+#include <vendor/glm/glm/gtc/matrix_transform.hpp>
+#include <vendor/glm/glm/gtc/type_ptr.hpp>
 
 glm::mat4 Transform::getModelMatrix() const
 {
