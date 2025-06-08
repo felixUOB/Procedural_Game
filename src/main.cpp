@@ -19,9 +19,15 @@
 #include "core/timer.h"
 #include "core/window.h"
 #include "util/transform.h"
+#include "core/map.h"
+#include "tools/shader_manager.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "tools/stb_image.h"
+#include "tools/json.hpp"
+
+// TOOD: REWRITE FRAG SHADER TO ACCEPT MUTIPLE LIGHTS (ARRAY NEEDED and For loop)
+// TODO: WRITE MAP CLASS AND FUNCTIONS TO ACCEPT JSON MAP DATA AND GENERATE GAMEOBJS
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -52,13 +58,6 @@ Light lightCube{
     glm::vec3(1.0f, 1.0f, 1.0f)
 };
 
-std::vector<glm::vec3> cubePositions = {
-    {0.0f, 0.0f, 0.0f},
-    {2.0f, 5.0f, -15.0f},
-    {-1.5f, -2.2f, -2.5f},
-};
-
-
 int main() {
 
    GLFWwindow* window = window::init(SCR_WIDTH, SCR_HEIGHT, "Game");
@@ -79,6 +78,10 @@ int main() {
    Shader cubeLightingShader("shaders/cubes/v_shader.glsl", "shaders/cubes/f_shader.glsl");
    Shader lightSourceShader("shaders/lightSource/v_lightSource.glsl", "shaders/lightSource/f_lightSource.glsl");
 
+   ShaderManager shaderManager;
+   shaderManager.registerShader("cubeLightingShader", cubeLightingShader);
+   shaderManager.registerShader("lightSourceShader", lightSourceShader);
+
    // creates meshes
    // --------------------------------------------------------
    Mesh cubeMesh(geometry::cubeVertices, true, true);
@@ -95,11 +98,18 @@ int main() {
    glActiveTexture(GL_TEXTURE1);
    glBindTexture(GL_TEXTURE_2D, texture2);
 
+   // load and generate map
+   Map map;
+   map.load("assets/maps/test_map.json");
+
    // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
    // -------------------------------------------------------------------------------------------
 
    cubeLightingShader.use();
-   cubeLightingShader.informTextureBindings(2);
+   cubeLightingShader.setInt("texture1", 0);
+   cubeLightingShader.setInt("texture2", 1);
+   // cubeLightingShader.informTextureBindings(2);
+
    cubeLightingShader.setVec3("object_color", 1.0f, 1.0f, 1.0f);
 
    lightCube.initToShader(cubeLightingShader, "lightSource");
@@ -116,8 +126,10 @@ int main() {
 
       // render
       // ------
-      glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+      // ========= THIS WILL ALL GO IN MAP RENDER FUNCTION ============
+
+      map.render(renderer, shaderManager);
 
       cubeLightingShader.use();
 
@@ -136,6 +148,10 @@ int main() {
 
       lightSourceShader.use();
       renderer.renderLightSource(lightSourceShader, cubeMesh, lightCube);
+
+      // ===================================================================
+
+
 
       // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
       // -------------------------------------------------------------------------------

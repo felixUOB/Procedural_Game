@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include "../tools/stb_image.h"
+#include <tools/stb_image.h>
 #include <config/glad/glad.h>
 #include <string>
 

@@ -1,5 +1,5 @@
 CXX = g++
-CXX_FLAGS = -std=c++11
+CXX_FLAGS = -std=c++11 -Wall
 
 CC = clang
 TARGET = game.exe
@@ -17,7 +17,8 @@ SRC_CPP = \
 	src/core/timer.cpp \
 	src/core/window.cpp \
 	src/util/transform.cpp \
-	src/core/map.cpp
+	src/core/map.cpp \
+	src/tools/shader_manager.cpp
 
 SRC_C = src/glad.c
 

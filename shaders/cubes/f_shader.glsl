@@ -30,7 +30,7 @@ void main()
 	vec3 lighting = ambient + diffuse;
 
 
-	 // Sample base color from texture
+	// Sample base color from texture
     vec3 texColor = texture(texture1, TexCoord).rgb;
 
     // Final color is texture modulated by lighting
