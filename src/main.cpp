@@ -16,6 +16,7 @@
 #include "lighting/light.h"
 #include "graphics/mesh.h"
 #include "core/renderer.h"
+#include "core/geometry.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "tools/stb_image.h"
@@ -92,55 +93,11 @@ int main() {
    glEnable(GL_DEPTH_TEST);
    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-   // set vertex data, buffers and configure vertex attributes
+   // creates meshes
    // --------------------------------------------------------
-   std::vector<float> cubeVertices = {
-    // Position            // Texture Coords       // Normals
-    -0.5f, -0.5f, -0.5f,      0.0f, 0.0f,       0.0f,  0.0f, -1.0f,
-     0.5f, -0.5f, -0.5f,      1.0f, 0.0f,       0.0f,  0.0f, -1.0f,
-     0.5f,  0.5f, -0.5f,      1.0f, 1.0f,       0.0f,  0.0f, -1.0f,
-     0.5f,  0.5f, -0.5f,      1.0f, 1.0f,       0.0f,  0.0f, -1.0f,
-    -0.5f,  0.5f, -0.5f,      0.0f, 1.0f,       0.0f,  0.0f, -1.0f,
-    -0.5f, -0.5f, -0.5f,      0.0f, 0.0f,       0.0f,  0.0f, -1.0f,
 
-    -0.5f, -0.5f,  0.5f,      0.0f, 0.0f,       0.0f,  0.0f,  1.0f,
-     0.5f, -0.5f,  0.5f,      1.0f, 0.0f,       0.0f,  0.0f,  1.0f,
-     0.5f,  0.5f,  0.5f,      1.0f, 1.0f,       0.0f,  0.0f,  1.0f,
-     0.5f,  0.5f,  0.5f,      1.0f, 1.0f,       0.0f,  0.0f,  1.0f,
-    -0.5f,  0.5f,  0.5f,      0.0f, 1.0f,       0.0f,  0.0f,  1.0f,
-    -0.5f, -0.5f,  0.5f,      0.0f, 0.0f,       0.0f,  0.0f,  1.0f,
-
-    -0.5f,  0.5f,  0.5f,      1.0f, 0.0f,      -1.0f,  0.0f,  0.0f,
-    -0.5f,  0.5f, -0.5f,      1.0f, 1.0f,      -1.0f,  0.0f,  0.0f,
-    -0.5f, -0.5f, -0.5f,      0.0f, 1.0f,      -1.0f,  0.0f,  0.0f,
-    -0.5f, -0.5f, -0.5f,      0.0f, 1.0f,      -1.0f,  0.0f,  0.0f,
-    -0.5f, -0.5f,  0.5f,      0.0f, 0.0f,      -1.0f,  0.0f,  0.0f,
-    -0.5f,  0.5f,  0.5f,      1.0f, 0.0f,      -1.0f,  0.0f,  0.0f,
-
-     0.5f,  0.5f,  0.5f,      1.0f, 0.0f,       1.0f,  0.0f,  0.0f,
-     0.5f,  0.5f, -0.5f,      1.0f, 1.0f,       1.0f,  0.0f,  0.0f,
-     0.5f, -0.5f, -0.5f,      0.0f, 1.0f,       1.0f,  0.0f,  0.0f,
-     0.5f, -0.5f, -0.5f,      0.0f, 1.0f,       1.0f,  0.0f,  0.0f,
-     0.5f, -0.5f,  0.5f,      0.0f, 0.0f,       1.0f,  0.0f,  0.0f,
-     0.5f,  0.5f,  0.5f,      1.0f, 0.0f,       1.0f,  0.0f,  0.0f,
-
-    -0.5f, -0.5f, -0.5f,      0.0f, 1.0f,       0.0f, -1.0f,  0.0f,
-     0.5f, -0.5f, -0.5f,      1.0f, 1.0f,       0.0f, -1.0f,  0.0f,
-     0.5f, -0.5f,  0.5f,      1.0f, 0.0f,       0.0f, -1.0f,  0.0f,
-     0.5f, -0.5f,  0.5f,      1.0f, 0.0f,       0.0f, -1.0f,  0.0f,
-    -0.5f, -0.5f,  0.5f,      0.0f, 0.0f,       0.0f, -1.0f,  0.0f,
-    -0.5f, -0.5f, -0.5f,      0.0f, 1.0f,       0.0f, -1.0f,  0.0f,
-
-    -0.5f,  0.5f, -0.5f,      0.0f, 1.0f,       0.0f,  1.0f,  0.0f,
-     0.5f,  0.5f, -0.5f,      1.0f, 1.0f,       0.0f,  1.0f,  0.0f,
-     0.5f,  0.5f,  0.5f,      1.0f, 0.0f,       0.0f,  1.0f,  0.0f,
-     0.5f,  0.5f,  0.5f,      1.0f, 0.0f,       0.0f,  1.0f,  0.0f,
-    -0.5f,  0.5f,  0.5f,      0.0f, 0.0f,       0.0f,  1.0f,  0.0f,
-    -0.5f,  0.5f, -0.5f,      0.0f, 1.0f,       0.0f,  1.0f,  0.0f
-};
-
-   Mesh cubeMesh(cubeVertices, true, true);
-   Mesh lightSourceMesh(cubeVertices, true, true);
+   Mesh cubeMesh(geometry::cubeVertices, true, true);
+   Mesh lightSourceMesh(geometry::cubeVertices, true, true);
 
    // load and generate textures using custom Loader
    // ----------------------------------------------
