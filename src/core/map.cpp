@@ -2,7 +2,7 @@
 #include "core/renderer.h"
 #include "graphics/shader.h"
 #include "tools/shader_manager.h"
-
+#include "tools/mesh_manager.h"
 #include <fstream>
 #include <iostream>
 #include <vendor/json.hpp>
@@ -29,7 +29,7 @@ void Map::load(const std::string& path)
     std::cout << mapData << std::endl;
 }
 
-void Map::render(Renderer& renderer, ShaderManager& shaderManager, Light& lightCube, Mesh& cubeMesh)
+void Map::render(Renderer& renderer, ShaderManager& shaderManager, MeshManager& meshManager, Light& lightCube)
 {
 
     // 1. Render Crates
@@ -45,7 +45,7 @@ void Map::render(Renderer& renderer, ShaderManager& shaderManager, Light& lightC
     glm::mat4 model = temp.getModelMatrix();
 
     currentShader.setMat4("model", model);
-    renderer.renderMeshWithLighting(currentShader, cubeMesh, model, lightCube);
+    renderer.renderMeshWithLighting(currentShader, meshManager.get("cubeMesh"), model, lightCube);
 
 
     // 2. Use light source shader and render lights
@@ -53,5 +53,5 @@ void Map::render(Renderer& renderer, ShaderManager& shaderManager, Light& lightC
     currentShader = shaderManager.get("lightSourceShader");
     currentShader.use();
 
-    renderer.renderLightSource(currentShader, cubeMesh, lightCube);
+    renderer.renderLightSource(currentShader, meshManager.get("cubeMesh"), lightCube);
 }

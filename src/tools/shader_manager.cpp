@@ -3,9 +3,6 @@
 #include <stdio.h>
 #include <iostream>
 
-
-
-
 void ShaderManager::registerShader(const char* name, Shader& shader)
 {
     std::cout << "Registering Shader: " << name << std::endl;

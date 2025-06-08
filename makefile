@@ -20,7 +20,8 @@ SRC_CPP = \
 	src/core/window.cpp \
 	src/util/transform.cpp \
 	src/core/map.cpp \
-	src/tools/shader_manager.cpp
+	src/tools/shader_manager.cpp \
+	src/tools/mesh_manager.cpp
 
 SRC_C = include/vendor/glad.c
 

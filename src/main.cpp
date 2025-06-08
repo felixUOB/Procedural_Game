@@ -21,6 +21,7 @@
 #include "util/transform.h"
 #include "core/map.h"
 #include "tools/shader_manager.h"
+#include "tools/mesh_manager.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "vendor/stb_image.h"
@@ -87,6 +88,10 @@ int main() {
    Mesh cubeMesh(geometry::cubeVertices, true, true);
    Mesh lightSourceMesh(geometry::cubeVertices, true, true);
 
+   MeshManager meshManager;
+   meshManager.registerMesh("cubeMesh", cubeMesh);
+   meshManager.registerMesh("lightSourceMesh", lightSourceMesh);
+
    // load and generate textures
    // --------------------------
    unsigned int texture1 = Texture::LoadTexture("assets/textures/container.jpg");
@@ -125,7 +130,7 @@ int main() {
       glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-      map.render(renderer, shaderManager, lightCube, cubeMesh);
+      map.render(renderer, shaderManager, meshManager, lightCube);
 
       // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
       // -------------------------------------------------------------------------------
