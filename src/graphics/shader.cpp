@@ -155,3 +155,11 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         }
     }
 }
+
+void Shader::informTextureBindings(int count)
+{
+    for (int i = 1; i <= count; i++)
+    {
+        setInt("texture" + std::to_string(i) , (i - 1));
+    }
+}

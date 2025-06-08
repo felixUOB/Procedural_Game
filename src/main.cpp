@@ -99,8 +99,8 @@ int main() {
    Mesh cubeMesh(geometry::cubeVertices, true, true);
    Mesh lightSourceMesh(geometry::cubeVertices, true, true);
 
-   // load and generate textures using custom Loader
-   // ----------------------------------------------
+   // load and generate textures
+   // --------------------------
 
    unsigned int texture1 = Texture::LoadTexture("assets/textures/container.jpg");
    unsigned int texture2 = Texture::LoadTexture("assets/textures/waltuh.jpg");
@@ -115,8 +115,7 @@ int main() {
    // -------------------------------------------------------------------------------------------
 
    cubeLightingShader.use();
-   cubeLightingShader.setInt("texture1", 0);
-   cubeLightingShader.setInt("texture2", 1);
+   cubeLightingShader.informTextureBindings(2);
    cubeLightingShader.setVec3("object_color", 1.0f, 1.0f, 1.0f);
 
    lightCube.initToShader(cubeLightingShader, "lightSource");
