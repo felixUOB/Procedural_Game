@@ -3,6 +3,8 @@
 #include "graphics/shader.h"
 #include "tools/shader_manager.h"
 #include "tools/mesh_manager.h"
+#include "utils/gameobj.h"
+
 #include <fstream>
 #include <iostream>
 #include <vendor/json.hpp>
@@ -26,7 +28,35 @@ void Map::load(const std::string& path)
     }
 
     file >> mapData;
-    // std::cout << mapData << std::endl;
+
+    for (auto& object : mapData) {
+
+        glm::vec3 t_position;
+        t_position.x = object["position"][0];
+        t_position.y = object["position"][1];
+        t_position.z = object["position"][2];
+
+        Transform transform;
+        transform.position = t_position;
+
+        Type type;
+        GameObject gameObject;
+
+        if (object["type"] == "crate"){
+            type = CRATE;
+        } else if (object["type"] == "lightSource"){
+            type = LIGHT;
+        } else {
+            type = T_NULL;
+        }
+
+        gameObject.type = type;
+        gameObject.transform = transform;
+
+        objects.push_back(gameObject);
+
+    }
+
 }
 
 void Map::render(Renderer& renderer, ShaderManager& shaderManager, MeshManager& meshManager, Light& lightCube)
@@ -37,22 +67,27 @@ void Map::render(Renderer& renderer, ShaderManager& shaderManager, MeshManager& 
     // Retrieving Shaders
     Shader& cubeShader = shaderManager.get("cubeLightingShader");
     Shader& lightSourceShader = shaderManager.get("lightSourceShader");
+    
+    // Render all objects
+    for (auto& item : objects) {
+        if (item.type == CRATE) {
+            cubeShader.use();
 
-    // 1. Render Crate(s)
-    cubeShader.use();
+            Transform temp = item.transform;
 
-    Transform temp;
-    float time = glfwGetTime();
+            float time = glfwGetTime();
 
-    temp.scale = glm::vec3(1.0f, 1.0f, 1.0f);
-    temp.rotation = glm::vec3(45.0f * time, 45.0f * time, 45.0f * time);
+            temp.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+            temp.rotation = glm::vec3(45.0f * time, 45.0f * time, 45.0f * time);
 
-    glm::mat4 model = temp.getModelMatrix();
+            glm::mat4 model = temp.getModelMatrix();
 
-    cubeShader.setMat4("model", model);
-    renderer.renderMeshWithLighting(cubeShader, cubeMesh, model, lightCube);
+            cubeShader.setMat4("model", model);
+            renderer.renderMeshWithLighting(cubeShader, cubeMesh, model, lightCube);
+        } else if (item.type == LIGHT){
 
-    // 2. Render light source
-    lightSourceShader.use();
-    renderer.renderLightSource(lightSourceShader, cubeMesh, lightCube);
+            lightSourceShader.use();
+            renderer.renderLightSource(lightSourceShader, cubeMesh, lightCube);
+        }
+    }
 }

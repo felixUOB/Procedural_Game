@@ -5,7 +5,8 @@
 
 enum Type {
     CRATE,
-    LIGHT
+    LIGHT,
+    T_NULL
 };
 
 struct GameObject {

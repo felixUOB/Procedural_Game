@@ -6,5 +6,21 @@
   {
     "type": "crate",
     "position": [3.0, 0.0, -1.5]
+  },
+  {
+    "type": "crate",
+    "position": [6.0, 0.0, -1.5]
+  },
+  {
+    "type": "crate",
+    "position": [-5.0, 0.0, -1.5]
+  },
+  {
+    "type": "crate",
+    "position": [-7.0, 0.0, -1.5]
+  },
+  {
+    "type": "lightSource",
+    "position": [-7.0, 0.0, -1.5]
   }
 ]
