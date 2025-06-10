@@ -36,8 +36,20 @@ void Map::load(const std::string& path)
         t_position.y = object["position"][1];
         t_position.z = object["position"][2];
 
+        glm::vec3 t_rotation;
+        t_rotation.x = object["rotation"][0];
+        t_rotation.y = object["rotation"][1];
+        t_rotation.z = object["rotation"][2];
+
+        glm::vec3 t_scale;
+        t_scale.x = object["scale"][0];
+        t_scale.y = object["scale"][1];
+        t_scale.z = object["scale"][2];
+
         Transform transform;
         transform.position = t_position;
+        transform.rotation = t_rotation;
+        transform.scale = t_scale;
 
         Type type;
         GameObject gameObject;
@@ -54,7 +66,6 @@ void Map::load(const std::string& path)
         gameObject.transform = transform;
 
         objects.push_back(gameObject);
-
     }
 
 }
@@ -74,17 +85,11 @@ void Map::render(Renderer& renderer, ShaderManager& shaderManager, MeshManager& 
             cubeShader.use();
 
             Transform temp = item.transform;
-
-            float time = glfwGetTime();
-
-            temp.scale = glm::vec3(1.0f, 1.0f, 1.0f);
-            temp.rotation = glm::vec3(45.0f * time, 45.0f * time, 45.0f * time);
-
             glm::mat4 model = temp.getModelMatrix();
 
             cubeShader.setMat4("model", model);
             renderer.renderMeshWithLighting(cubeShader, cubeMesh, model, lightCube);
-        } else if (item.type == LIGHT){
+        } else if (item.type == LIGHT){ // THIS NEEDS TO BE FIXED AS CURRENTLY POSITION IS NOT TAKEN FROM MAP
 
             lightSourceShader.use();
             renderer.renderLightSource(lightSourceShader, cubeMesh, lightCube);
