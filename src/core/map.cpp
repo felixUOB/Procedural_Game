@@ -54,18 +54,30 @@ void Map::load(const std::string& path)
         Type type;
         GameObject gameObject;
 
-        if (object["type"] == "crate"){
+       std::string objType = object["type"];
+        if (objType == "crate") {
             type = CRATE;
-        } else if (object["type"] == "lightSource"){
-            type = LIGHT;
+
+            gameObject.type = type;
+            gameObject.transform = transform;
+
+            objects.push_back(gameObject);
+
+        } else if (objType == "lightSource") {
+            type = LIGHT; // <-- REDUNDANT
+
+
+            glm::vec3 color;
+            color.x = object["color"][0];
+            color.y = object["color"][1];
+            color.z = object["color"][2];
+
+            // Create a light from this object
+            Light light(transform.position, color);
+            lights.push_back(light);
         } else {
-            type = T_NULL;
+            std::cerr << "ERROR - LOAD: INVALID OBJECT TYPE" << std::endl;
         }
-
-        gameObject.type = type;
-        gameObject.transform = transform;
-
-        objects.push_back(gameObject);
     }
 
 }
@@ -78,21 +90,31 @@ void Map::render(Renderer& renderer, ShaderManager& shaderManager, MeshManager& 
     // Retrieving Shaders
     Shader& cubeShader = shaderManager.get("cubeLightingShader");
     Shader& lightSourceShader = shaderManager.get("lightSourceShader");
-    
-    // Render all objects
+
+    cubeShader.setInt("numLights", lights.size());
+
+    for (size_t i = 0; i < lights.size(); ++i) {
+        lights[i].initToShader(cubeShader, "lights[" + std::to_string(i) + "]");
+    }
+
+    // Render all lights
+    lightSourceShader.use();
+    for (auto& light : lights) {
+        renderer.renderLightSource(lightSourceShader, cubeMesh, light);
+    }
+
+    // Render all gameObjects
+    cubeShader.use();
     for (auto& item : objects) {
         if (item.type == CRATE) {
-            cubeShader.use();
 
             Transform temp = item.transform;
             glm::mat4 model = temp.getModelMatrix();
 
             cubeShader.setMat4("model", model);
             renderer.renderMeshWithLighting(cubeShader, cubeMesh, model, lightCube);
-        } else if (item.type == LIGHT){ // THIS NEEDS TO BE FIXED AS CURRENTLY POSITION IS NOT TAKEN FROM MAP
-
-            lightSourceShader.use();
-            renderer.renderLightSource(lightSourceShader, cubeMesh, lightCube);
+        } else {
+            std::cerr << "ERROR - RENDER: INVALID OBJECT TYPE";
         }
     }
 }

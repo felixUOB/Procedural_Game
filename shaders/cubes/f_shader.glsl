@@ -10,25 +10,33 @@ uniform sampler2D texture2;
 
 uniform vec3 object_color;
 
-uniform vec3 lightSource_color;
-uniform vec3 lightSource_position;
+// Struct to represent a light
+struct Light {
+    vec3 position;
+    vec3 color;
+};
+
+uniform int numLights;
+uniform Light lights[10]; // Support up to 10 lights
 
 void main()
 {
-	// diffuse lighting
 	vec3 norm = normalize(Normal);
-									// WorldSpace
-	vec3 lightDir = normalize(lightSource_position - FragPos); 
+    vec3 totalDiffuse = vec3(0.0);
+    vec3 totalAmbient = vec3(0.0);
 
-	float diff = max(dot(norm, lightDir), 0.0);
-	vec3 diffuse = diff * lightSource_color;
+    float ambientStrength = 0.1;
 
-	// ambient lighting
-	float ambientStrength = 0.1f;
-	vec3 ambient = ambientStrength * lightSource_color;
+    // Loop through each light
+    for (int i = 0; i < numLights; ++i) {
+        vec3 lightDir = normalize(lights[i].position - FragPos);
+        float diff = max(dot(norm, lightDir), 0.0);
 
-	vec3 lighting = ambient + diffuse;
+        totalDiffuse += diff * lights[i].color;
+        totalAmbient += ambientStrength * lights[i].color;
+    }
 
+    vec3 lighting = totalAmbient + totalDiffuse;
 
 	// Sample base color from texture
     vec3 texColor = texture(texture1, TexCoord).rgb;

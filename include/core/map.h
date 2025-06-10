@@ -15,6 +15,7 @@ class Map
         void render(Renderer& renderer, ShaderManager& shaderManager, MeshManager& meshManager, Light& lightCube);
     private:
         std::vector<GameObject> objects;
+        std::vector<Light> lights;
 };
 
 #endif

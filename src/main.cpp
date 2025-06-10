@@ -120,7 +120,9 @@ int main() {
 
    cubeLightingShader.setVec3("object_color", 1.0f, 1.0f, 1.0f);
 
-   lightCube.initToShader(cubeLightingShader, "lightSource");
+   // LOOP THROUGH LOADED MAP DATA, INIT ALL LIGHT POSITIONS CUBE SHADER
+
+   lightCube.initToShader(cubeLightingShader, "lightSource"); // <--- THIS NEEDS TO BE REMOVED AND 
 
    // render loop
    // -----------

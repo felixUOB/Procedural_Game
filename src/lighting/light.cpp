@@ -11,8 +11,8 @@ Light::Light(const glm::vec3& position, const glm::vec3& color)
 
 void Light::initToShader(Shader& shader, const std::string& uniformName) const 
 {
-    shader.setVec3(uniformName + "_position", position);
-    shader.setVec3(uniformName + "_color", color);
+    shader.setVec3(uniformName + ".position", position);
+    shader.setVec3(uniformName + ".color", color);
 }
 
 const glm::vec3& Light::getPosition() const {
