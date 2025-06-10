@@ -31,3 +31,9 @@ build
 *.exe
 *.out
 *.app
+
+# Vscode Files
+compile_commands.json
+
+# Ignore clangd cache
+.cache/

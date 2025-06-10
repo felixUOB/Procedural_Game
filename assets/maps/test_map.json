@@ -32,14 +32,14 @@
   },
    {
     "type": "lightSource",
-    "position": [0.0, 10.0, 0.0],
+    "position": [0.0, 2.0, -2.0],
     "rotation": [45.0, 45.0, 0.0],
     "scale": [1.0, 1.0, 1.0],
     "color": [0.0, 0.0, 1.0]
   },
   {
     "type": "lightSource",
-    "position": [0.0, 10.0, -10.0],
+    "position": [0.0, 2.0, -6.0],
     "rotation": [45.0, 45.0, 0.0],
     "scale": [1.0, 1.0, 1.0],
     "color": [1.0, 0.0, 0.0]
