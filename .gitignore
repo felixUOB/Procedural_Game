@@ -38,4 +38,4 @@ compile_commands.json
 # Ignore clangd cache
 .cache/
 
-include/vendor/*
+# include/vendor/*
