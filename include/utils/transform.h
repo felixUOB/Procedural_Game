@@ -4,11 +4,11 @@
 #include <vendor/glm/glm/glm.hpp>
 
 struct Transform {
-    glm::vec3 position;
-    glm::vec3 rotation;
-    glm::vec3 scale;
+  glm::vec3 position;
+  glm::vec3 rotation;
+  glm::vec3 scale;
 
-    glm::mat4 getModelMatrix() const;
+  glm::mat4 getModelMatrix() const;
 };
 
-#endif 
+#endif

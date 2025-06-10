@@ -10,12 +10,6 @@
 #include <iostream>
 #include <vendor/json.hpp>
 
-#include <GLFW/glfw3.h>
-#include <vendor/glad/glad.h>
-#include <vendor/glm/glm/glm.hpp>
-#include <vendor/glm/glm/gtc/matrix_transform.hpp>
-#include <vendor/glm/glm/gtc/type_ptr.hpp>
-
 void Map::load(const std::string &path) {
   std::cout << "Loading Map from: " << path << std::endl;
   nlohmann::json mapData;
@@ -63,7 +57,7 @@ void Map::load(const std::string &path) {
 }
 
 void Map::render(Renderer &renderer, ShaderManager &shaderManager,
-                 MeshManager &meshManager, Light &lightCube) {
+                 MeshManager &meshManager) {
   // Retreiving Meshes
   Mesh &cubeMesh = meshManager.get("cubeMesh");
 
@@ -92,7 +86,7 @@ void Map::render(Renderer &renderer, ShaderManager &shaderManager,
       glm::mat4 model = temp.getModelMatrix();
 
       cubeShader.setMat4("model", model);
-      renderer.renderMeshWithLighting(cubeShader, cubeMesh, model, lightCube);
+      renderer.renderMeshWithLighting(cubeShader, cubeMesh, model);
     } else {
       std::cout << "ERROR - RENDER: INVALID OBJECT TYPE" << std::endl;
     }
