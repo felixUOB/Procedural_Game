@@ -51,21 +51,17 @@ void Map::load(const std::string& path)
         transform.rotation = t_rotation;
         transform.scale = t_scale;
 
-        Type type;
-        GameObject gameObject;
-
        std::string objType = object["type"];
         if (objType == "crate") {
-            type = CRATE;
+            
+            GameObject gameObject;
 
-            gameObject.type = type;
+            gameObject.type = CRATE;
             gameObject.transform = transform;
 
             objects.push_back(gameObject);
 
         } else if (objType == "lightSource") {
-            type = LIGHT; // <-- REDUNDANT
-
 
             glm::vec3 color;
             color.x = object["color"][0];

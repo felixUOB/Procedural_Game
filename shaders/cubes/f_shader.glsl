@@ -32,11 +32,15 @@ void main()
         vec3 lightDir = normalize(lights[i].position - FragPos);
         float diff = max(dot(norm, lightDir), 0.0);
 
-        totalDiffuse += diff * lights[i].color;
+		float distance = length(lights[i].position - FragPos);
+		float intensity = 1.0 / (distance * distance);
+
+        totalDiffuse += (diff * intensity) * lights[i].color;
         totalAmbient += ambientStrength * lights[i].color;
     }
 
     vec3 lighting = totalAmbient + totalDiffuse;
+
 
 	// Sample base color from texture
     vec3 texColor = texture(texture1, TexCoord).rgb;

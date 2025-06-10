@@ -5,7 +5,6 @@
 
 enum Type {
     CRATE,
-    LIGHT,
     T_NULL
 };
 
