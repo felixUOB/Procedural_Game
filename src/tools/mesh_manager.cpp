@@ -4,7 +4,7 @@
 
 void MeshManager::registerMesh(const char *name, Mesh &mesh) {
   std::cout << "Registering mesh: " << name << std::endl;
-  meshes.insert({name, mesh});
+  meshes.emplace(name, mesh);
 }
 
 Mesh &MeshManager::get(const char *name) { return meshes.at(name); }

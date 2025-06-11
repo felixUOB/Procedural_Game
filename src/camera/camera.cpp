@@ -2,11 +2,6 @@
 
 #include <cmath>
 #include <vendor/glad/glad.h>
-
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <string>
 #include <vendor/glm/glm/gtc/matrix_transform.hpp>
 
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)

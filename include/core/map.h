@@ -6,7 +6,6 @@
 #include "tools/mesh_manager.h"
 #include "tools/shader_manager.h"
 #include "utils/gameobj.h"
-#include <vendor/glad/glad.h>
 
 class Map {
 public:

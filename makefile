@@ -22,7 +22,8 @@ SRC_CPP = \
 	src/core/map.cpp \
 	src/tools/shader_manager.cpp \
 	src/tools/mesh_manager.cpp \
-	src/utils/json_converter.cpp
+	src/utils/json_converter.cpp \
+	src/tools/texture_manager.cpp
 
 SRC_C = include/vendor/glad.c
 

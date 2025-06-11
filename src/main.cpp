@@ -19,6 +19,7 @@
 #include "graphics/texture.h"
 #include "tools/mesh_manager.h"
 #include "tools/shader_manager.h"
+#include "tools/texture_manager.h"
 #include "utils/geometry.h"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -37,9 +38,7 @@ bool polyMode = false;
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
 // renderer
-Renderer
-    renderer(camera, SCR_WIDTH,
-             SCR_HEIGHT); // lowercase camera and ints, actual objects/values
+Renderer renderer(camera, SCR_WIDTH, SCR_HEIGHT);
 
 // config
 float lastX = SCR_WIDTH / 2.0f;
@@ -89,11 +88,12 @@ int main() {
   unsigned int texture1 = Texture::LoadTexture("assets/textures/container.jpg");
   unsigned int texture2 = Texture::LoadTexture("assets/textures/waltuh.jpg");
 
-  // bind textures on corresponding texture units - pre program run
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, texture1);
-  glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, texture2);
+  TextureManager TextureManager;
+  TextureManager.registerTexture("container", texture1);
+  TextureManager.registerTexture("waltuh", texture2);
+
+  TextureManager.bindTexture("container");
+  TextureManager.bindTexture("waltuh");
 
   // load and generate map
   Map map;
