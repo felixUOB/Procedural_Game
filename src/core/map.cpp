@@ -79,6 +79,9 @@ void Map::render(Renderer &renderer, ShaderManager &shaderManager,
 
   // Render all gameObjects
   cubeShader.use();
+  cubeShader.setInt("activeTexture", 0);
+  cubeShader.setVec3("object_color", 1.0f, 1.0f, 1.0f);
+
   for (auto &item : objects) {
     if (item.type == CRATE) {
 

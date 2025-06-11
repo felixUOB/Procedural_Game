@@ -5,8 +5,7 @@ in vec2 TexCoord;
 in vec3 Normal;
 in vec3 FragPos;  
 
-uniform sampler2D texture1;
-uniform sampler2D texture2;
+uniform sampler2D activeTexture;
 
 uniform vec3 object_color;
 
@@ -43,7 +42,7 @@ void main()
 
 
 	// Sample base color from texture
-    vec3 texColor = texture(texture1, TexCoord).rgb;
+    vec3 texColor = texture(activeTexture, TexCoord).rgb;
 
     // Final color is texture modulated by lighting
     vec3 finalColor = lighting * texColor;

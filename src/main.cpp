@@ -99,17 +99,6 @@ int main() {
   Map map;
   map.load("assets/maps/test_map.json");
 
-  // tell opengl for each sampler to which texture unit it belongs to (only has
-  // to be done once)
-  // -------------------------------------------------------------------------------------------
-
-  cubeLightingShader.use();
-  cubeLightingShader.setInt("texture1", 0);
-  cubeLightingShader.setInt("texture2", 1);
-  // cubeLightingShader.informTextureBindings(2);
-
-  cubeLightingShader.setVec3("object_color", 1.0f, 1.0f, 1.0f);
-
   // render loop
   // -----------
   while (!glfwWindowShouldClose(window)) {
