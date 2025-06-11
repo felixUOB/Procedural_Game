@@ -1,4 +1,3 @@
-# Procedural_Game
-A Procedurally Generated 3D FPS Game with ML-Powered Enemies created over the summer period of 2025. Starting June 1st.
+# C++ Rendering Engine with Custom Map Loader
 
-This project aims to tackle graphics programming, game engine architecture, procedural content generation, and ML integration in games.
+3D Rendering engine built in C++ - May add more game mechanics in future
