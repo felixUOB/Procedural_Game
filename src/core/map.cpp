@@ -35,16 +35,15 @@ void Map::load(const std::string &path) {
 
     std::string objType = object["type"];
     if (objType == "crate") {
+      cubeObjects.push_back({CRATE, transform});
 
-      GameObject gameObject;
+    } else if (objType == "wall") {
+      cubeObjects.push_back({WALL, transform});
 
-      gameObject.type = CRATE;
-      gameObject.transform = transform;
-
-      objects.push_back(gameObject);
+   } else if (objType == "waltuh") {
+      cubeObjects.push_back({WALTUH, transform});
 
     } else if (objType == "lightSource") {
-
       glm::vec3 color = JsonConverter::jsonVecToVec3(object["color"]);
 
       // Create a light from this object
@@ -65,8 +64,6 @@ void Map::render(Renderer &renderer, ShaderManager &shaderManager,
   Shader &cubeShader = shaderManager.get("cubeLightingShader");
   Shader &lightSourceShader = shaderManager.get("lightSourceShader");
 
-  cubeShader.setInt("numLights", lights.size());
-
   for (size_t i = 0; i < lights.size(); ++i) {
     lights[i].initToShader(cubeShader, "lights[" + std::to_string(i) + "]");
   }
@@ -77,21 +74,25 @@ void Map::render(Renderer &renderer, ShaderManager &shaderManager,
     renderer.renderLightSource(lightSourceShader, cubeMesh, light);
   }
 
-  // Render all gameObjects
   cubeShader.use();
-  cubeShader.setInt("activeTexture", 0);
-  cubeShader.setVec3("object_color", 1.0f, 1.0f, 1.0f);
+  cubeShader.setInt("numLights", lights.size());
 
-  for (auto &item : objects) {
+  for (auto &item : cubeObjects) {
+    Transform temp = item.transform;
+    glm::mat4 model = temp.getModelMatrix();
+
     if (item.type == CRATE) {
-
-      Transform temp = item.transform;
-      glm::mat4 model = temp.getModelMatrix();
-
-      cubeShader.setMat4("model", model);
-      renderer.renderMeshWithLighting(cubeShader, cubeMesh, model);
+      cubeShader.setInt("activeTexture", 0);
+    } else if (item.type == WALTUH) {
+      cubeShader.setInt("activeTexture", 1);
+    } else if (item.type == WALL) {
+      cubeShader.setInt("activeTexture", 2);
+   
     } else {
       std::cout << "ERROR - RENDER: INVALID OBJECT TYPE" << std::endl;
     }
+
+    cubeShader.setMat4("model", model);
+    renderer.renderMeshWithLighting(cubeShader, cubeMesh, model);
   }
 }

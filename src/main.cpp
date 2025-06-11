@@ -65,10 +65,10 @@ int main() {
 
   // build and compile shader programs and register to shader manager
   // ----------------------------------------------------------------
-  Shader cubeLightingShader("shaders/cubes/v_shader.glsl",
-                            "shaders/cubes/f_shader.glsl");
-  Shader lightSourceShader("shaders/lightSource/v_lightSource.glsl",
-                           "shaders/lightSource/f_lightSource.glsl");
+  Shader cubeLightingShader("shaders/cubes/v_shader.glsl", 
+    "shaders/cubes/f_shader.glsl");
+  Shader lightSourceShader("shaders/lightSource/v_lightSource.glsl", 
+    "shaders/lightSource/f_lightSource.glsl");
 
   ShaderManager shaderManager;
   shaderManager.registerShader("cubeLightingShader", cubeLightingShader);
@@ -83,17 +83,19 @@ int main() {
   meshManager.registerMesh("cubeMesh", cubeMesh);
   meshManager.registerMesh("lightSourceMesh", lightSourceMesh);
 
-  // load and generate textures
-  // --------------------------
-  unsigned int texture1 = Texture::LoadTexture("assets/textures/container.jpg");
-  unsigned int texture2 = Texture::LoadTexture("assets/textures/waltuh.jpg");
-
+  // load/generate/register/bind textures
+  // ------------------------------------
   TextureManager TextureManager;
-  TextureManager.registerTexture("container", texture1);
-  TextureManager.registerTexture("waltuh", texture2);
+  TextureManager.registerTexture(
+      "crate", Texture::LoadTexture("assets/textures/crate.jpg"));
+  TextureManager.registerTexture(
+      "waltuh", Texture::LoadTexture("assets/textures/waltuh.jpg"));
+  TextureManager.registerTexture(
+      "wall", Texture::LoadTexture("assets/textures/wall.jpg"));
 
-  TextureManager.bindTexture("container");
+  TextureManager.bindTexture("crate");
   TextureManager.bindTexture("waltuh");
+  TextureManager.bindTexture("wall");
 
   // load and generate map
   Map map;

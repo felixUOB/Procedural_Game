@@ -19,7 +19,9 @@ void TextureManager::bindTexture(const std::string &name) {
   }
 
   unsigned int texture = avalibleTextures.at(name);
-  std::cout << "Binding Texture to: " << currentTextureSlot << std::endl;
+
+  std::cout << "Binding Texture: " << name << " to " << currentTextureSlot
+            << std::endl;
   glActiveTexture(GL_TEXTURE0 + currentTextureSlot);
   glBindTexture(GL_TEXTURE_2D, texture);
 

@@ -7,8 +7,6 @@ in vec3 FragPos;
 
 uniform sampler2D activeTexture;
 
-uniform vec3 object_color;
-
 // Struct to represent a light
 struct Light {
     vec3 position;

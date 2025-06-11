@@ -5,10 +5,13 @@
 
 enum Type {
     CRATE,
+    WALL,
+    WALTUH,
     T_NULL
 };
 
 struct GameObject {
+    
     Type type;
     Transform transform;
 };

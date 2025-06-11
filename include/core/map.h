@@ -14,7 +14,7 @@ public:
               MeshManager &meshManager);
 
 private:
-  std::vector<GameObject> objects;
+  std::vector<GameObject> cubeObjects;
   std::vector<Light> lights;
 };
 
