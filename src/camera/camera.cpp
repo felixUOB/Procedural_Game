@@ -1,6 +1,8 @@
 #include "camera/camera.h"
+#include "vendor/glm/glm/fwd.hpp"
 
 #include <cmath>
+#include <iostream>
 #include <vendor/glad/glad.h>
 #include <vendor/glm/glm/gtc/matrix_transform.hpp>
 
@@ -16,8 +18,8 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
 
 Camera::Camera(float posX, float posY, float posZ, float upX, float upY,
                float upZ, float yaw, float pitch)
-    : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED),
-      MouseSensitivity(SENSITIVITY) {
+    : Acceleration(glm::vec3(0,0,0)), Velocity(glm::vec3(0,0,0) ),Front(glm::vec3(0.0f, 0.0f, -1.0f)),
+      MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY){
   Position = glm::vec3(posX, posY, posZ);
   WorldUp = glm::vec3(upX, upY, upZ);
   Yaw = yaw;
@@ -39,12 +41,14 @@ void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
     Position -= Right * velocity;
   if (direction == RIGHT)
     Position += Right * velocity;
-  if (direction == UP)
-    Position += WorldUp * velocity;
+  if (direction == UP && isOnGround) {
+    std::cout << "TEST" << std::endl;
+    Acceleration.y = -1.0;
+    Velocity.y = 0.75;
+    isOnGround = false;
+  }
   if (direction == DOWN)
     Position -= WorldUp * velocity;
-
-  Position.y = 0.3;
 }
 
 void Camera::ProcessMouseMovement(float xoffset, float yoffset,

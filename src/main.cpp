@@ -171,6 +171,17 @@ void processInput(GLFWwindow *window) {
       glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   }
   pKeyWasPressed = pKeyIsPressed;
+
+  if (camera.Velocity != glm::vec3(0,0,0)){
+    camera.Position.y += (camera.Velocity.y * timer.deltaTime) + (0.5 * camera.Acceleration.y * timer.deltaTime * timer.deltaTime);
+    camera.Velocity.y = camera.Velocity.y + (camera.Acceleration.y * timer.deltaTime);
+  }
+
+  if (camera.Position.y < 0.25) {
+    camera.Position.y = 0.25;
+    camera.Acceleration.y = 0;
+    camera.isOnGround = true;
+  }
 }
 
 void mouse_callback(GLFWwindow *window, double xposIn, double yposIn) {
