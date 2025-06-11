@@ -92,10 +92,16 @@ int main() {
       "waltuh", Texture::LoadTexture("assets/textures/waltuh.jpg"));
   TextureManager.registerTexture(
       "wall", Texture::LoadTexture("assets/textures/wall.jpg"));
+  TextureManager.registerTexture(
+      "floor", Texture::LoadTexture("assets/textures/floor.jpg"));
+  TextureManager.registerTexture(
+      "ceiling", Texture::LoadTexture("assets/textures/ceiling.jpg"));
 
   TextureManager.bindTexture("crate");
   TextureManager.bindTexture("waltuh");
   TextureManager.bindTexture("wall");
+  TextureManager.bindTexture("floor");
+  TextureManager.bindTexture("ceiling");
 
   // load and generate map
   Map map;

@@ -7,6 +7,9 @@ in vec3 FragPos;
 
 uniform sampler2D activeTexture;
 
+uniform vec2 uvTiling;
+
+
 // Struct to represent a light
 struct Light {
     vec3 position;
@@ -18,6 +21,9 @@ uniform Light lights[10]; // Support up to 10 lights
 
 void main()
 {
+
+    vec2 tiledUV = TexCoord * uvTiling;
+
 	vec3 norm = normalize(Normal);
     vec3 totalDiffuse = vec3(0.0);
     vec3 totalAmbient = vec3(0.0);
@@ -40,7 +46,7 @@ void main()
 
 
 	// Sample base color from texture
-    vec3 texColor = texture(activeTexture, TexCoord).rgb;
+    vec3 texColor = texture(activeTexture, tiledUV).rgb;
 
     // Final color is texture modulated by lighting
     vec3 finalColor = lighting * texColor;

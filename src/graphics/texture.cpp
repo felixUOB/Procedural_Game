@@ -32,7 +32,7 @@ unsigned int Texture::LoadTexture(const std::string &path, bool flip,
       format = GL_RGBA;
 
   if (data) {
-    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGB,
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format,
                  GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
   } else {

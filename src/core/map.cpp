@@ -40,8 +40,14 @@ void Map::load(const std::string &path) {
     } else if (objType == "wall") {
       cubeObjects.push_back({WALL, transform});
 
-   } else if (objType == "waltuh") {
+    } else if (objType == "waltuh") {
       cubeObjects.push_back({WALTUH, transform});
+
+    } else if (objType == "floor") {
+      cubeObjects.push_back({FLOOR, transform});
+
+    } else if (objType == "ceiling") {
+      cubeObjects.push_back({CEILING, transform});
 
     } else if (objType == "lightSource") {
       glm::vec3 color = JsonConverter::jsonVecToVec3(object["color"]);
@@ -80,14 +86,23 @@ void Map::render(Renderer &renderer, ShaderManager &shaderManager,
   for (auto &item : cubeObjects) {
     Transform temp = item.transform;
     glm::mat4 model = temp.getModelMatrix();
+    cubeShader.setVec2("uvTiling", glm::vec2(1.0, 1.0));
+
 
     if (item.type == CRATE) {
       cubeShader.setInt("activeTexture", 0);
     } else if (item.type == WALTUH) {
       cubeShader.setInt("activeTexture", 1);
     } else if (item.type == WALL) {
+      cubeShader.setVec2("uvTiling", glm::vec2(10.0, 10.0));
       cubeShader.setInt("activeTexture", 2);
-   
+    } else if (item.type == FLOOR) {
+      cubeShader.setVec2("uvTiling", glm::vec2(10.0, 10.0));
+      cubeShader.setInt("activeTexture", 3);
+    } else if (item.type == CEILING) {
+      cubeShader.setVec2("uvTiling", glm::vec2(10.0, 10.0));
+      cubeShader.setInt("activeTexture", 4);
+
     } else {
       std::cout << "ERROR - RENDER: INVALID OBJECT TYPE" << std::endl;
     }

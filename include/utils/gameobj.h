@@ -7,6 +7,8 @@ enum Type {
     CRATE,
     WALL,
     WALTUH,
+    FLOOR,
+    CEILING,
     T_NULL
 };
 

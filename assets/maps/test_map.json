@@ -1,15 +1,39 @@
 [
   {
-    "type": "crate",
-    "position": [0.0, 0.0, 20.0],
-    "rotation": [45.0, 45.0, 0.0],
-    "scale": [1.0, 1.0, 1.0]
+    "type": "floor",
+    "position": [0, 0, 0],
+    "rotation": [0, 0, 0],
+    "scale": [5, 0.1, 5]
+  },
+  {
+    "type": "ceiling",
+    "position": [0, 1, 0],
+    "rotation": [0, 0, 0],
+    "scale": [5, 0.1, 5]
   },
   {
     "type": "wall",
-    "position": [1.0, -2.0, -4.0],
+    "position": [2.5, 0.5, 0],
     "rotation": [0.0, 0.0, 0.0],
-    "scale": [5.0, 5.0, 5.0]
+    "scale": [0.1, 1, 5.0]
+  },
+  {
+    "type": "wall",
+    "position": [-2.5, 0.5, 0],
+    "rotation": [0.0, 0.0, 0.0],
+    "scale": [0.1, 1, 5.0]
+  },
+  {
+    "type": "wall",
+    "position": [0, 0.5, -2.5],
+    "rotation": [0.0, 90.0, 0.0],
+    "scale": [0.1, 1, 5.0]
+  },
+  {
+    "type": "wall",
+    "position": [0, 0.5, 2.5],
+    "rotation": [0.0, 90.0, 0.0],
+    "scale": [0.1, 1, 5.0]
   },
   {
     "type": "waltuh",
@@ -25,23 +49,16 @@
   },
   {
     "type": "lightSource",
-    "position": [0.0, -2.0, 0.0],
+    "position": [0.0, 1.0, 0.0],
     "rotation": [45.0, 45.0, 0.0],
     "scale": [1.0, 1.0, 1.0],
-    "color": [0.0, 1.0, 0.0]
-  },
-   {
-    "type": "lightSource",
-    "position": [0.0, 2.0, -2.0],
-    "rotation": [45.0, 45.0, 0.0],
-    "scale": [1.0, 1.0, 1.0],
-    "color": [0.0, 0.0, 1.0]
+    "color": [1.0, 1.0, 1.0]
   },
   {
     "type": "lightSource",
-    "position": [0.0, 2.0, -6.0],
+    "position": [0.0, 1.0, 1.0],
     "rotation": [45.0, 45.0, 0.0],
     "scale": [1.0, 1.0, 1.0],
-    "color": [1.0, 0.0, 0.0]
+    "color": [1.0, 1.0, 1.0]
   }
 ]
