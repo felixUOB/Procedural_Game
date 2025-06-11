@@ -3,6 +3,8 @@ This is a personal graphics engine built in modern C++ using OpenGL, created as 
 
 ⚠️ Not production-ready — just a playground for experimenting and learning.
 
+https://github.com/user-attachments/assets/8011244b-d530-4762-8878-4c29c82955b5
+
 ## ✨ Goals
 - Learn modern OpenGL (3.3+)
 - Build a flexible rendering pipeline from scratch
