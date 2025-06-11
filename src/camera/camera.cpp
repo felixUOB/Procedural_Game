@@ -42,7 +42,6 @@ void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
   if (direction == RIGHT)
     Position += Right * velocity;
   if (direction == UP && isOnGround) {
-    std::cout << "TEST" << std::endl;
     Acceleration.y = -1.0;
     Velocity.y = 0.75;
     isOnGround = false;
