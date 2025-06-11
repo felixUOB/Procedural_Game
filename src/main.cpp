@@ -35,7 +35,7 @@ const unsigned int SCR_HEIGHT = 600;
 bool polyMode = false;
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
 
 // renderer
 Renderer renderer(camera, SCR_WIDTH, SCR_HEIGHT);
