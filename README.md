@@ -3,5 +3,5 @@
 3D Rendering engine built in C++ with Custom JSON Map Loader
 
 ## Current Rendering
-https://github.com/user-attachments/assets/c60ea03e-16fa-46d4-b493-9486badd8086
+https://github.com/user-attachments/assets/19e069e8-3349-4dbb-a002-79209422d221
 
