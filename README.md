@@ -31,7 +31,6 @@ This is a personal graphics engine built in modern C++ using OpenGL, created as 
 │       ├── floor.jpg
 │       ├── wall.jpg
 │       └── waltuh.jpg
-├── compile_commands.json
 ├── include
 │   ├── camera
 │   │   └── camera.h
@@ -56,7 +55,15 @@ This is a personal graphics engine built in modern C++ using OpenGL, created as 
 │   │   ├── json_converter.h
 │   │   └── transform.h
 │   └── vendor
-├── makefile
+│       ├── glad
+│       │   └── glad.h
+│       ├── glad.c
+│       ├── glm
+│       │   └── ...
+│       ├── json.hpp
+│       ├── KHR
+│       │   └── ...
+│       └── stb_image.h
 ├── README.md
 ├── shaders
 │   ├── cubes
